@@ -2,6 +2,7 @@ package ru.practicum.shareit;
 
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,7 +35,8 @@ public class UserServiceTest {
     private final UserService userService;
 
 
-    {
+    @BeforeEach
+    public void init() {
         client = HttpClient.newHttpClient();
 
         userDto = new UserDto();
