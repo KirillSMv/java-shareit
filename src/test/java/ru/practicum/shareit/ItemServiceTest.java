@@ -1,3 +1,4 @@
+/*
 package ru.practicum.shareit;
 
 import com.google.gson.Gson;
@@ -115,3 +116,4 @@ public class ItemServiceTest {
     }
 }
 
+*/

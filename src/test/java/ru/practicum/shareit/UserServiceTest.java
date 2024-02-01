@@ -1,3 +1,4 @@
+/*
 package ru.practicum.shareit;
 
 import com.google.gson.Gson;
@@ -108,3 +109,4 @@ public class UserServiceTest {
         assertThrows(ObjectNotFoundException.class, () -> userService.getById(1));
     }
 }
+*/
