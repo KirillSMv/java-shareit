@@ -1,4 +1,4 @@
-package ru.practicum.shareit.ErrorHandler;
+package ru.practicum.shareit.errorHandler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.exceptions.ObjectAlreadyExistsException;
 import ru.practicum.shareit.exceptions.ObjectNotFoundException;
+
+import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class ErrorHandler {
@@ -18,7 +20,13 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handle(final IllegalArgumentException e) {
-        return new ErrorResponse("Произошла ошибка: ", e.getMessage());
+        return new ErrorResponse("Произошла валидации: ", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handle(final ConstraintViolationException e) {
+        return new ErrorResponse("Ошибка валидации", e.getMessage());
     }
 
     @ExceptionHandler
@@ -32,11 +40,4 @@ public class ErrorHandler {
     public ErrorResponse handle(final ObjectAlreadyExistsException e) {
         return new ErrorResponse("Произошла ошибка: ", e.getMessage());
     }
-
-/*    @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleThrowable(final Throwable e) {
-        return new ErrorResponse("Произошла непредвиденная ошибка.",
-                "Пожалуйста, обратитесь в службу технической поддержки.");
-    }*/
 }

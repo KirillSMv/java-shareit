@@ -1,4 +1,4 @@
-package ru.practicum.shareit.ErrorHandler;
+package ru.practicum.shareit.errorHandler;
 
 public class AuthorizationException extends RuntimeException {
     public AuthorizationException(String message) {

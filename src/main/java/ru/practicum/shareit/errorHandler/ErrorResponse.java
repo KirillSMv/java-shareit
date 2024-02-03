@@ -1,4 +1,4 @@
-package ru.practicum.shareit.ErrorHandler;
+package ru.practicum.shareit.errorHandler;
 
 import lombok.Getter;
 import lombok.Setter;
