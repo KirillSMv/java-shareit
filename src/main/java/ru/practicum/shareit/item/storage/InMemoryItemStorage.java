@@ -2,6 +2,8 @@ package ru.practicum.shareit.item.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import ru.practicum.shareit.exceptions.ObjectAlreadyExistsException;
+import ru.practicum.shareit.exceptions.ObjectNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -41,11 +43,6 @@ public class InMemoryItemStorage implements ItemStorage {
     }
 
     @Override
-    public List<Item> getAll() {
-        return new ArrayList<>(items.values());
-    }
-
-    @Override
     public List<Item> search(long userId, String text) {
         if (text.isBlank()) {
             return new ArrayList<>();
@@ -54,6 +51,32 @@ public class InMemoryItemStorage implements ItemStorage {
                 .filter(item -> item.getAvailable().equals(true))
                 .filter(item -> item.getName().toLowerCase().contains(text.toLowerCase()) || item.getDescription().toLowerCase().contains(text.toLowerCase()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void checkIfItemExistsByName(String name) {
+        if (items.values().stream().anyMatch(item -> item.getName().equals(name))) {
+            log.error("Вещь с таким именем - {} уже добавлена", name);
+            throw new ObjectAlreadyExistsException(String.format("Вещь с таким именем - %s уже добавлена", name));
+        }
+    }
+
+    @Override
+    public void checkIfExistsById(long itemId) {
+        if (items.values().stream().noneMatch(item -> item.getId().equals(itemId))) {
+            log.error("Вещи с id = {} не существует", itemId);
+            throw new ObjectNotFoundException(String.format("Вещи с id = %d не существует", itemId));
+        }
+    }
+
+    @Override
+    public void checkIfItemWithNameAlreadyExists(long itemId, Item item) {
+        if (items.values().stream().filter(it -> !it.getId().equals(itemId))
+                .anyMatch(it -> it.getName().equals(item.getName()))) {
+            log.error("Вещь с названием - {} уже существует", item.getName());
+            throw new ObjectAlreadyExistsException(String.format("Вещь с названием - %s уже существует",
+                    item.getName()));
+        }
     }
 
     private long getUniqueId() {

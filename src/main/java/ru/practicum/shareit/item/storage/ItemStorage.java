@@ -14,7 +14,11 @@ public interface ItemStorage {
 
     List<Item> getAllForUser(long userId);
 
-    List<Item> getAll();
-
     List<Item> search(long userId, String text);
+
+    void checkIfItemExistsByName(String name);
+
+    void checkIfExistsById(long itemId);
+
+    void checkIfItemWithNameAlreadyExists(long itemId, Item item);
 }

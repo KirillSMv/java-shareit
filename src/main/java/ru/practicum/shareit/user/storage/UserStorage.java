@@ -14,4 +14,10 @@ public interface UserStorage {
     User updateUser(long id, User user);
 
     void deleteUserById(long id);
+
+    void checkIfUserExistsByEmail(String email);
+
+    void checkIfUserExistsById(long id);
+
+    void checkIfUserWithEmailAlreadyExists(long id, User user);
 }
