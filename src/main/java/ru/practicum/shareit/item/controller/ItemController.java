@@ -57,7 +57,7 @@ public class ItemController {
         return itemService.getAllForUser(userId).stream().map(ItemDtoMapper::toDto).collect(Collectors.toList());
     }
 
-    @GetMapping("/search")
+    @GetMapping(value = "/search", params = "text")
     public List<ItemDto> search(
             @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
             @RequestParam("text") String text) {
