@@ -1,9 +1,19 @@
 package ru.practicum.shareit.booking.dto;
 
-import ru.practicum.shareit.booking.enums.Status;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import ru.practicum.shareit.item.model.Item;
 
-public class BookingDto { //todo validation
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class BookingDto {
     private Long id;
-    private String start;
-    private String end;
+    private LocalDateTime start;
+    private LocalDateTime end;
+    private Item item;
+    private Long bookerId;
 }

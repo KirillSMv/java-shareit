@@ -29,18 +29,13 @@ public class Item {
     @Column(nullable = false)
     private Boolean available;
 
-    @ManyToOne(fetch = FetchType.LAZY) //todo CASCADE?
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ToString.Exclude
     private User owner;
 
-    @ManyToOne(fetch = FetchType.LAZY) //todo CASCADE?
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id", referencedColumnName = "id")
     @ToString.Exclude
     private ItemRequest request;
 }
-
-
-// todo private Long daysRented; //сколько дней вещь была в аренде (опциональное поле, если будет целесообразно добавить)
-//todo private Set<Review> reviews; //после бронирования можно добавить отзыв (опциональное поле)
-
