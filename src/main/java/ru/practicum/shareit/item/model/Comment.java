@@ -22,12 +22,12 @@ public class Comment {
     @Column(name = "description", nullable = false)
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     @ToString.Exclude
     private Item item;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ToString.Exclude
     private User author;

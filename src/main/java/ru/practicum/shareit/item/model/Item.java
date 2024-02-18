@@ -29,12 +29,12 @@ public class Item {
     @Column(nullable = false)
     private Boolean available;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ToString.Exclude
     private User owner;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "request_id", referencedColumnName = "id")
     @ToString.Exclude
     private ItemRequest request;

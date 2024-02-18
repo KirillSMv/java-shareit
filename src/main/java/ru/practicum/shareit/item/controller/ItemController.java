@@ -3,7 +3,12 @@ package ru.practicum.shareit.item.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentDtoFromUser;
+import ru.practicum.shareit.item.dto.ItemDtoFromUser;
+import ru.practicum.shareit.item.dto.ItemDtoWithComments;
+import ru.practicum.shareit.item.dto.mapper.CommentDtoMapper;
+import ru.practicum.shareit.item.dto.mapper.ItemDtoMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
@@ -24,20 +29,20 @@ public class ItemController {
 
     @Validated(OnCreate.class)
     @PostMapping
-    public ItemDto add(
+    public ItemDtoFromUser add(
             @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
-            @Valid @RequestBody ItemDto itemDto) {
-        Item item = itemService.add(userId, ItemDtoMapper.toItem(itemDto));
+            @Valid @RequestBody ItemDtoFromUser itemDtoFromUser) {
+        Item item = itemService.add(userId, ItemDtoMapper.toItem(itemDtoFromUser));
         return ItemDtoMapper.toDto(item);
     }
 
     @Validated(OnUpdate.class)
     @PatchMapping("/{itemId}")
-    public ItemDto updateItem(
+    public ItemDtoFromUser updateItem(
             @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
             @PathVariable("itemId") @Positive(message = "id не может быть меньше 1") long itemId,
-            @Valid @RequestBody ItemDto itemDto) {
-        Item item = itemService.updateItem(userId, itemId, ItemDtoMapper.toItem(itemDto));
+            @Valid @RequestBody ItemDtoFromUser itemDtoFromUser) {
+        Item item = itemService.updateItem(userId, itemId, ItemDtoMapper.toItem(itemDtoFromUser));
         return ItemDtoMapper.toDto(item);
     }
 
@@ -55,7 +60,7 @@ public class ItemController {
     }
 
     @GetMapping(value = "/search", params = "text")
-    public List<ItemDto> search(
+    public List<ItemDtoFromUser> search(
             @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
             @RequestParam("text") String text) {
         return itemService.search(userId, text).stream().map(ItemDtoMapper::toDto).collect(Collectors.toList());
@@ -65,9 +70,9 @@ public class ItemController {
     public CommentDto addComment(
             @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
             @PathVariable("itemId") @Positive(message = "id не может быть меньше 1") long itemId,
-            @Valid @RequestBody UserComment userComment) {
+            @Valid @RequestBody CommentDtoFromUser commentDtoFromUser) {
         Comment comment = new Comment();
-        comment.setText(userComment.getText());
+        comment.setText(commentDtoFromUser.getText());
         return CommentDtoMapper.toCommentDto(itemService.addComment(userId, itemId, comment));
     }
 }

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class BookingDtoIncoming {
+public class BookingDtoFromUser {
     private Long id;
 
     @NotNull
@@ -18,8 +18,8 @@ public class BookingDtoIncoming {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime start;
 
-    @Future
     @NotNull
+    @Future
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime end;
 

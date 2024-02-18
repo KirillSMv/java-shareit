@@ -18,8 +18,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "from Item as it " +
             "join fetch it.owner " +
             "where it.available = true " +
-            "and (lower(it.description) like lower(?1) " +
-            "or lower(it.name) like lower(?1))")
+            "and (lower(it.description) like lower(CONCAT('%', ?1, '%')) " +
+            "or lower(it.name) like lower(CONCAT('%', ?1, '%')))")
     List<Item> findAllContainingTextWithAvailableStatus(String text);
 
     @Query("select it from Item it " +

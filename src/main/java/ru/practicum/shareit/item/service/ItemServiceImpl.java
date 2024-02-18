@@ -7,11 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDtoMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.errorHandler.AuthorizationException;
+import ru.practicum.shareit.exceptions.AuthorizationException;
 import ru.practicum.shareit.exceptions.ObjectNotFoundException;
-import ru.practicum.shareit.item.dto.CommentDtoMapper;
-import ru.practicum.shareit.item.dto.ItemDtoMapper;
 import ru.practicum.shareit.item.dto.ItemDtoWithComments;
+import ru.practicum.shareit.item.dto.mapper.CommentDtoMapper;
+import ru.practicum.shareit.item.dto.mapper.ItemDtoMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.CommentRepository;
@@ -35,7 +35,11 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public Item add(long userId, Item item) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException(String.format("Пользователь с id %d не найден", userId)));
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+                    log.error("Пользователь с id {}} не найден", userId);
+                    return new ObjectNotFoundException(String.format("Пользователь с id %d не найден", userId));
+                }
+        );
         item.setOwner(user);
         return itemRepository.save(item);
     }
@@ -43,7 +47,10 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public Item updateItem(long userId, long itemId, Item item) {
-        Item savedItem = itemRepository.findByIdJoinFetchOwner(itemId).orElseThrow(() -> new ObjectNotFoundException(String.format("Вещи с id %d не найдено", itemId)));
+        Item savedItem = itemRepository.findByIdJoinFetchOwner(itemId).orElseThrow(() -> {
+            log.error("Вещи с id {} не найдено", itemId);
+            return new ObjectNotFoundException(String.format("Вещи с id %d не найдено", itemId));
+        });
         checkIfOwnerUpdates(userId, savedItem);
         updateFields(savedItem, item);
         return savedItem;
@@ -51,7 +58,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDtoWithComments getWithBookingsById(long userId, long itemId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ObjectNotFoundException(String.format("Вещи с id %d не найдено", itemId)));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> {
+            log.error("Вещи с id {} не найдено", itemId);
+            return new ObjectNotFoundException(String.format("Вещи с id %d не найдено", itemId));
+        });
         if (userId == item.getOwner().getId()) {
             return ItemDtoMapper.toItemDtoWithComments(item,
                     CommentDtoMapper.toCommentDtoList(commentRepository.findAllByItem(item)),
@@ -65,7 +75,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item getById(long itemId) {
-        return itemRepository.findById(itemId).orElseThrow(() -> new ObjectNotFoundException(String.format("Вещи с id %d не найдено", itemId)));
+        return itemRepository.findById(itemId).orElseThrow(() -> {
+            log.error("Вещи с id {} не найдено", itemId);
+            return new ObjectNotFoundException(String.format("Вещи с id %d не найдено", itemId));
+        });
     }
 
     @Override
@@ -77,28 +90,21 @@ public class ItemServiceImpl implements ItemService {
         Map<Long, List<Comment>> commentsMap = commentRepository.findAllByItemIn(items).stream()
                 .collect(Collectors.groupingBy(comment -> comment.getItem().getId()));
 
-        //Здесь что-то я долго ломал голову как бы достать из базы сразу один нужный booking (последний/следующий),
-        //с JPA query как-то не вышло, возможно, нативным запросом можно что-то сделать. Могу подумать тут еще, если такой
-        //вариант не очень по производительности
-        Map<Long, List<Booking>> lastBookingsListsMap = bookingService.findAllLastBookingsForItems(items).stream()
-                .collect(Collectors.groupingBy(booking -> booking.getItem().getId()));
-        Map<Long, Booking> lastBookingsMap = new HashMap<>();
-        for (Long itemId : lastBookingsListsMap.keySet()) {
-            lastBookingsMap.put(itemId, lastBookingsListsMap.get(itemId).get(0));
+        Map<Long, Booking> lastBookingsListsMap = new HashMap<>();
+        for (Booking booking : bookingService.findAllLastBookingsForItems(items)) {
+            lastBookingsListsMap.put(booking.getItem().getId(), booking);
         }
 
-        Map<Long, List<Booking>> nextBookingsListMap = bookingService.findAllNextBookingsForItems(items).stream()
-                .collect(Collectors.groupingBy(booking -> booking.getItem().getId()));
-        Map<Long, Booking> nextBookingsMap = new HashMap<>();
-        for (Long itemId : nextBookingsListMap.keySet()) {
-            nextBookingsMap.put(itemId, nextBookingsListMap.get(itemId).get(0));
+        Map<Long, Booking> nextBookingsListMap = new HashMap<>();
+        for (Booking booking : bookingService.findAllNextBookingsForItems(items)) {
+            nextBookingsListMap.put(booking.getItem().getId(), booking);
         }
 
         return items.stream()
                 .map(item -> ItemDtoMapper.toItemDtoWithComments(item,
                         CommentDtoMapper.toCommentDtoList(commentsMap.getOrDefault(item.getId(), Collections.emptyList())),
-                        BookingDtoMapper.toBookingDtoWithBookerId(lastBookingsMap.getOrDefault(item.getId(), null)),
-                        BookingDtoMapper.toBookingDtoWithBookerId(nextBookingsMap.getOrDefault(item.getId(), null))))
+                        BookingDtoMapper.toBookingDtoWithBookerId(lastBookingsListsMap.getOrDefault(item.getId(), null)),
+                        BookingDtoMapper.toBookingDtoWithBookerId(nextBookingsListMap.getOrDefault(item.getId(), null))))
                 .sorted(Comparator.comparingLong(ItemDtoWithComments::getId))
                 .collect(Collectors.toList());
     }
@@ -107,9 +113,15 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Comment addComment(long userId, long itemId, Comment comment) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ObjectNotFoundException(String.format("Пользователь с id %d не найден", userId)));
+                .orElseThrow(() -> {
+                    log.error("Пользователь с id {}} не найден", userId);
+                    return new ObjectNotFoundException(String.format("Пользователь с id %d не найден", userId));
+                });
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new ObjectNotFoundException(String.format("Вещи с id %d не найдено", itemId)));
+                .orElseThrow(() -> {
+                    log.error("Вещи с id {} не найдено", itemId);
+                    return new ObjectNotFoundException(String.format("Вещи с id %d не найдено", itemId));
+                });
         checkIfUserRentedItem(user, item);
         comment.setAuthor(user);
         comment.setItem(item);
@@ -119,21 +131,23 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<Item> search(long userId, String text) {
         if (text.isBlank()) {
-            log.error("text содержит пустую строку");
+            log.error("поле text содержит пустую строку");
             return new ArrayList<>();
         }
-        return itemRepository.findAllContainingTextWithAvailableStatus("%" + text + "%");
+        return itemRepository.findAllContainingTextWithAvailableStatus(text);
     }
 
     private void checkIfOwnerUpdates(long userId, Item item) {
         if (item.getOwner().getId() != userId) {
-            log.error("Обновить данные вещи может только ее владелец");
-            throw new AuthorizationException("Обновить данные вещи может только ее владелец");
+            log.error("Обновить данные вещи может только ее владелец, userId = {}, ownerId = {}", userId, item.getOwner().getId());
+            throw new AuthorizationException(String.format("Обновить данные вещи может только ее владелец, userId = %d, ownerId = %d",
+                    userId, item.getOwner().getId()));
         }
     }
 
     private void checkIfUserRentedItem(User user, Item item) {
         if (!bookingService.checkIfUserRentedItem(user, item)) {
+            log.error("Для добавления отзыва нужно завершить аренду вещи");
             throw new IllegalArgumentException("Для добавления отзыва нужно завершить аренду вещи");
         }
     }

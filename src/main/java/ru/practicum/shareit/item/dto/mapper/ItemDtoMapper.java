@@ -1,30 +1,33 @@
-package ru.practicum.shareit.item.dto;
+package ru.practicum.shareit.item.dto.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.ItemDtoFromUser;
+import ru.practicum.shareit.item.dto.ItemDtoWithComments;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ItemDtoMapper {
-    public static Item toItem(ItemDto itemDto) {
+    public static Item toItem(ItemDtoFromUser itemDtoFromUser) {
         Item item = new Item();
-        item.setId(itemDto.getId());
-        item.setName(itemDto.getName());
-        item.setDescription(itemDto.getDescription());
-        item.setAvailable(itemDto.getAvailable());
+        item.setId(itemDtoFromUser.getId());
+        item.setName(itemDtoFromUser.getName());
+        item.setDescription(itemDtoFromUser.getDescription());
+        item.setAvailable(itemDtoFromUser.getAvailable());
         return item;
     }
 
-    public static ItemDto toDto(Item item) {
-        ItemDto itemDto = new ItemDto();
-        itemDto.setId(item.getId());
-        itemDto.setName(item.getName());
-        itemDto.setDescription(item.getDescription());
-        itemDto.setAvailable(item.getAvailable());
-        return itemDto;
+    public static ItemDtoFromUser toDto(Item item) {
+        ItemDtoFromUser itemDtoFromUser = new ItemDtoFromUser();
+        itemDtoFromUser.setId(item.getId());
+        itemDtoFromUser.setName(item.getName());
+        itemDtoFromUser.setDescription(item.getDescription());
+        itemDtoFromUser.setAvailable(item.getAvailable());
+        return itemDtoFromUser;
     }
 
     public static ItemDtoWithComments toItemDtoWithComments(Item item,

@@ -25,7 +25,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getById(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(String.format("Пользователь с id %d не найден", id)));
+        return userRepository.findById(id).orElseThrow(() -> {
+            log.error("Пользователь с id {} не найден", id);
+            return new ObjectNotFoundException(String.format("Пользователь с id %d не найден", id));
+        });
     }
 
     @Override
@@ -36,7 +39,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User updateUser(long id, User user) {
-        User savedUser = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(String.format("Пользователь с id %d не найден", id)));
+        User savedUser = userRepository.findById(id).orElseThrow(() -> {
+            log.error("Пользователь с id {} не найден", id);
+            return new ObjectNotFoundException(String.format("Пользователь с id %d не найден", id));
+        });
         updateRequiredFields(savedUser, user);
         return savedUser;
     }
@@ -48,8 +54,6 @@ public class UserServiceImpl implements UserService {
             log.error("Пользователь с id {} не найден", id);
             return new ObjectNotFoundException(String.format("Пользователь с id %d не найден", id));
         });
-        //В выражении выше я логирую ошибку, но думаю, нужно ли это, если в хендлере все равно логируется потом исключение
-        //Принято ли вообще логировать в случаях orElseThrow()?
         userRepository.deleteById(id);
     }
 

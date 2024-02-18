@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.dto.BookingDtoIncoming;
+import ru.practicum.shareit.booking.dto.BookingDtoFromUser;
 import ru.practicum.shareit.booking.dto.BookingDtoMapper;
+import ru.practicum.shareit.booking.dto.BookingDtoToUser;
 import ru.practicum.shareit.booking.enums.BookingState;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.exceptions.NoEnumValueExistsException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.model.User;
@@ -37,46 +39,60 @@ public class BookingController {
      */
 
     @PostMapping
-    public Booking add(@Valid @RequestBody BookingDtoIncoming bookingDtoIncoming,
-                       @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId) {
-        checkIfBookingPeriodValid(bookingDtoIncoming);
+    public BookingDtoToUser add(@Valid @RequestBody BookingDtoFromUser bookingDtoFromUser,
+                                @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId) {
+        checkIfBookingPeriodValid(bookingDtoFromUser);
         User user = userService.getById(userId);
-        Item item = itemService.getById(bookingDtoIncoming.getItemId());
-        return bookingService.add(BookingDtoMapper.toBooking(bookingDtoIncoming, user, item));
+        Item item = itemService.getById(bookingDtoFromUser.getItemId());
+        Booking booking = bookingService.add(BookingDtoMapper.toBooking(bookingDtoFromUser, user, item));
+        return BookingDtoMapper.toBookingDtoToUser(booking);
     }
 
     @PatchMapping(value = "/{bookingId}", params = "approved")
-    public Booking processBooking(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
-                                  @PathVariable("bookingId") @Positive(message = "id не может быть меньше 1") long bookingId,
-                                  @RequestParam("approved") boolean approved) {
-        return bookingService.processBooking(userId, bookingId, approved);
+    public BookingDtoToUser processBooking(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
+                                           @PathVariable("bookingId") @Positive(message = "id не может быть меньше 1") long bookingId,
+                                           @RequestParam("approved") boolean approved) {
+        Booking booking = bookingService.processBooking(userId, bookingId, approved);
+        return BookingDtoMapper.toBookingDtoToUser(booking);
     }
 
     @GetMapping("/{bookingId}")
-    public Booking getBookingDetails(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
-                                     @PathVariable("bookingId") @Positive(message = "id не может быть меньше 1") long bookingId) {
-        return bookingService.getById(userId, bookingId);
+    public BookingDtoToUser getBookingDetails(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
+                                              @PathVariable("bookingId") @Positive(message = "id не может быть меньше 1") long bookingId) {
+
+        Booking booking = bookingService.getById(userId, bookingId);
+        return BookingDtoMapper.toBookingDtoToUser(booking);
     }
 
 
     @GetMapping
-    public List<Booking> getAllBookingForUser(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
-                                              @RequestParam(name = "state", defaultValue = "ALL") @NotBlank String stateParam) {
-        BookingState bookingState = BookingState.valueOf(stateParam.toUpperCase());
-        return bookingService.getBookingsForUser(userId, bookingState);
-
+    public List<BookingDtoToUser> getAllBookingsForUser(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
+                                                        @RequestParam(name = "state", defaultValue = "ALL") @NotBlank String stateParam) {
+        BookingState bookingState;
+        try {
+            bookingState = BookingState.valueOf(stateParam.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new NoEnumValueExistsException(String.format("Проверьте правильность переданных параметров: stateParam = %s", stateParam));
+        }
+        List<Booking> bookings = bookingService.getBookingsForUser(userId, bookingState);
+        return BookingDtoMapper.toBookingDtoToUserList(bookings);
     }
 
     @GetMapping("/owner")
-    public List<Booking> getAllBookingsForUserItems(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
-                                                    @RequestParam(name = "state", defaultValue = "ALL") @NotBlank String stateParam) {
-        BookingState bookingState = BookingState.valueOf(stateParam.toUpperCase());
-        return bookingService.getAllBookingsForUserItems(userId, bookingState);
-
+    public List<BookingDtoToUser> getAllBookingsForUserItems(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
+                                                             @RequestParam(name = "state", defaultValue = "ALL") @NotBlank String stateParam) {
+        BookingState bookingState;
+        try {
+            bookingState = BookingState.valueOf(stateParam.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new NoEnumValueExistsException(String.format("Проверьте правильность переданных параметров: stateParam = %s", stateParam));
+        }
+        List<Booking> bookings = bookingService.getAllBookingsForUserItems(userId, bookingState);
+        return BookingDtoMapper.toBookingDtoToUserList(bookings);
     }
 
-    private void checkIfBookingPeriodValid(BookingDtoIncoming bookingDtoIncoming) {
-        if (bookingDtoIncoming.getEnd().isBefore(bookingDtoIncoming.getStart()) || bookingDtoIncoming.getEnd().isEqual(bookingDtoIncoming.getStart())) {
+    private void checkIfBookingPeriodValid(BookingDtoFromUser bookingDtoFromUser) {
+        if (bookingDtoFromUser.getEnd().isBefore(bookingDtoFromUser.getStart()) || bookingDtoFromUser.getEnd().isEqual(bookingDtoFromUser.getStart())) {
             log.error("Неверно указан срок аренды");
             throw new IllegalArgumentException("Неверно указан срок аренды");
         }

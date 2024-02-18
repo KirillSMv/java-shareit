@@ -15,11 +15,6 @@ import java.util.Optional;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    @Query("select bk from Booking as bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.id  = ?1")
-    Optional<Booking> findByIdJoinFetch(long bookingId);
 
     @Query("select bk from Booking as bk " +
             "where bk.item = ?1 " +
@@ -29,131 +24,57 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     Optional<Booking> findIfBookingTimeCrossed(Item item, LocalDateTime start, LocalDateTime end);
 
 
-    @Query("select bk from Booking as bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.booker.id = ?1 " +
-            "order by bk.start DESC")
-    List<Booking> findAllByBooker(long bookerId);
+    List<Booking> findAllByBookerOrderByStartDesc(User booker);
 
-    @Query("select bk from Booking as bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.booker = ?1 " +
-            "and bk.status = ?2")
-    List<Booking> findAllByBookerAndStatusEquals(User booker, Status status);
+    List<Booking> findAllByBookerAndStatus(User booker, Status status);
 
-    @Query("select bk from Booking bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.booker = ?1 " +
-            "and bk.end < CURRENT_TIMESTAMP " +
-            "order by bk.start DESC")
-    List<Booking> findAllPastBookingsForUser(User booker);
+    List<Booking> findAllByBookerAndEndBeforeOrderByStartDesc(User booker, LocalDateTime currentTime);
 
-    @Query("select bk from Booking bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.booker = ?1 " +
-            "and bk.start < CURRENT_TIMESTAMP " +
-            "and bk.end > CURRENT_TIMESTAMP " +
-            "order by bk.start DESC")
-    List<Booking> findAllCurrentBookingsForUser(User booker);
+    List<Booking> findAllByBookerAndStartBeforeAndEndAfterOrderByStartDesc(User booker, LocalDateTime currentTime,
+                                                                           LocalDateTime currentTimeSecondParameter);
 
-    @Query("select bk from Booking bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.booker = ?1 " +
-            "and bk.start > CURRENT_TIMESTAMP " +
-            "order by bk.start DESC")
-    List<Booking> findAllFutureBookingsForUser(User booker);
+    List<Booking> findAllByBookerAndStartAfterOrderByStartDesc(User booker, LocalDateTime currentTime);
 
 
     //Owner requests
-    @Query("select bk from Booking as bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.item.owner = ?1 " +
-            "order by bk.start DESC")
-    List<Booking> findAllBookingsForUserItems(User owner);
-
-    @Query("select bk from Booking as bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.item.owner = ?1 " +
-            "and bk.status = ?2 " +
-            "order by bk.start DESC")
-    List<Booking> findAllBookingsForUserItemsAndStatusEquals(User owner, Status status);
-
-    @Query("select bk from Booking as bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.item.owner = ?1 " +
-            "and bk.end < CURRENT_TIMESTAMP " +
-            "order by bk.start DESC")
-    List<Booking> findAllPastBookingsForUserItems(User owner);
+    List<Booking> findAllByItemOwnerOrderByStartDesc(User owner);
 
 
-    @Query("select bk from Booking as bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.item.owner = ?1 " +
-            "and bk.start < CURRENT_TIMESTAMP " +
-            "and bk.end > CURRENT_TIMESTAMP " +
-            "order by bk.start DESC")
-    List<Booking> findAllCurrentBookingsForUserItems(User owner);
+    List<Booking> findAllByItemOwnerAndStatusOrderByStartDesc(User owner, Status status);
 
-    @Query("select bk from Booking as bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.item.owner = ?1 " +
-            "and bk.start > CURRENT_TIMESTAMP " +
-            "order by bk.start DESC")
-    List<Booking> findAllFutureBookingsForUserItems(User owner);
 
-    @Query("select bk from Booking bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.item = ?1 " +
-            "and bk.status <> 'REJECTED' " +
-            "and bk.status <> 'CANCELLED' " +
-            "and bk.start < CURRENT_TIMESTAMP " +
-            "order by bk.start desc")
-    List<Booking> findAllLastBookingsForItem(Item item);
+    List<Booking> findAllByItemOwnerAndEndBeforeOrderByStartDesc(User owner, LocalDateTime currentTime);
 
-    @Query("select bk from Booking bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.item = ?1 " +
-            "and bk.status <> 'REJECTED' " +
-            "and bk.status <> 'CANCELLED' " +
-            "and bk.start > CURRENT_TIMESTAMP " +
-            "order by bk.start asc")
-    List<Booking> findAllNextBookingsForItem(Item item);
+    List<Booking> findAllByItemOwnerAndStartBeforeAndEndAfterOrderByStartDesc(User owner, LocalDateTime currentTime,
+                                                                              LocalDateTime currentTimeSecondParameter);
 
-    @Query("select bk from Booking bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.item IN ?1 " +
-            "and bk.status <> 'REJECTED' " +
-            "and bk.status <> 'CANCELLED' " +
-            "and bk.start < CURRENT_TIMESTAMP " +
-            "order by bk.start desc")
-    List<Booking> findAllLastBookingsForItems(List<Item> items);
+    List<Booking> findAllByItemOwnerAndStartAfterOrderByStartDesc(User owner, LocalDateTime currentTime);
 
-    @Query("select bk from Booking bk " +
-            "join fetch bk.item " +
-            "join fetch bk.booker " +
-            "where bk.item IN ?1 " +
-            "and bk.status <> 'REJECTED' " +
-            "and bk.status <> 'CANCELLED' " +
-            "and bk.start > CURRENT_TIMESTAMP " +
-            "order by bk.start asc")
-    List<Booking> findAllNextBookingsForItems(List<Item> items);
+    List<Booking> findAllByItemAndStatusNotInAndStartBeforeOrderByStartDesc(Item item,
+                                                                            List<Status> statuses,
+                                                                            LocalDateTime currentTime);
 
-    @Query("select bk from Booking bk " +
-            "where bk.booker = ?1 " +
-            "and bk.item = ?2 " +
-            "and bk.end < CURRENT_TIMESTAMP")
-    List<Booking> findAllForUserAndItemInThePast(User user, Item item);
+    List<Booking> findAllByItemAndStatusNotInAndStartAfterOrderByStartAsc(Item item,
+                                                                          List<Status> statuses,
+                                                                          LocalDateTime currentTime);
+
+    @Query(value = "SELECT *" +
+            "FROM bookings AS bk " +
+            "WHERE bk.item_id IN (?1) " +
+            "AND bk.status NOT IN ('CANCELLED', 'REJECTED') " +
+            "AND bk.start_time < ?2 " +
+            "ORDER BY bk.start_time DESC " +
+            "LIMIT 1", nativeQuery = true)
+    List<Booking> findAllByItemInAndStatusNotInAndStartBeforeOrderByStartDesc(List<Item> items, LocalDateTime currentTime);
+
+    long countByBookerAndItemAndEndBefore(User user, Item item, LocalDateTime currentTime);
+
+    @Query(value = "SELECT *" +
+            "FROM bookings AS bk " +
+            "WHERE bk.item_id IN (?1) " +
+            "AND bk.status NOT IN ('CANCELLED', 'REJECTED') " +
+            "AND bk.start_time > ?2 " +
+            "ORDER BY bk.start_time ASC " +
+            "LIMIT 1", nativeQuery = true)
+    List<Booking> findAllByItemInAndStatusNotInAndStartAfterOrderByStartAsc(List<Item> items, LocalDateTime currentTime);
 }
