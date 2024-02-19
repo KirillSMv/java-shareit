@@ -175,7 +175,7 @@ public class BookingServiceImpl implements BookingService {
             throw new IllegalArgumentException("Статус брони уже 'Approved' и не может быть подтверждена");
         }
         if (booking.getStatus() == Status.CANCELLED) {
-            log.error("Статус брони 'CANCELLED' и не может быть подтверждена");
+            log.error("Статус брони 'CANCELLED' и поэтому не может быть подтверждена");
             throw new IllegalArgumentException("Статус брони 'CANCELLED' и не может быть подтверждена");
         }
     }
