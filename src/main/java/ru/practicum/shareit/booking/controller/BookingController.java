@@ -10,7 +10,6 @@ import ru.practicum.shareit.booking.dto.BookingDtoToUser;
 import ru.practicum.shareit.booking.enums.BookingState;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.exceptions.NoEnumValueExistsException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.model.User;
@@ -68,12 +67,7 @@ public class BookingController {
     @GetMapping
     public List<BookingDtoToUser> getAllBookingsForUser(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
                                                         @RequestParam(name = "state", defaultValue = "ALL") @NotBlank String stateParam) {
-        BookingState bookingState;
-        try {
-            bookingState = BookingState.valueOf(stateParam.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new NoEnumValueExistsException(String.format("Проверьте правильность переданных параметров: stateParam = %s", stateParam));
-        }
+        BookingState bookingState = BookingState.convert(stateParam.toUpperCase());
         List<Booking> bookings = bookingService.getBookingsForUser(userId, bookingState);
         return BookingDtoMapper.toBookingDtoToUserList(bookings);
     }
@@ -81,12 +75,7 @@ public class BookingController {
     @GetMapping("/owner")
     public List<BookingDtoToUser> getAllBookingsForUserItems(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
                                                              @RequestParam(name = "state", defaultValue = "ALL") @NotBlank String stateParam) {
-        BookingState bookingState;
-        try {
-            bookingState = BookingState.valueOf(stateParam.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new NoEnumValueExistsException(String.format("Проверьте правильность переданных параметров: stateParam = %s", stateParam));
-        }
+        BookingState bookingState = BookingState.convert(stateParam.toUpperCase());
         List<Booking> bookings = bookingService.getAllBookingsForUserItems(userId, bookingState);
         return BookingDtoMapper.toBookingDtoToUserList(bookings);
     }
