@@ -65,34 +65,36 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "LIMIT 1", nativeQuery = true)
     List<Booking> findAllByItemInAndStatusNotInAndStartBeforeOrderByStartDesc(List<Item> items, LocalDateTime currentTime);*/
 
-    @Query(value = "SELECT bks.item_id, bks.id, bks.start_time, bks.end_time, bks.user_id, bks.status " +
+/*    @Query(value = "SELECT bks.item_id, bks.id, bks.start_time, bks.end_time, bks.user_id, bks.status " +
             "FROM items AS it " +
-            "CROSS JOIN LATERAL" +
+            "INNER JOIN LATERAL " +
             "(SELECT bk.id, bk.item_id, bk.start_time, bk.end_time, bk.user_id, bk.status " +
             "FROM bookings as bk " +
             "WHERE it.id = bk.item_id " +
             "AND bk.status NOT IN ('CANCELLED', 'REJECTED') " +
             "AND bk.start_time < ?2 " +
             "ORDER BY bk.start_time DESC " +
-            "LIMIT 1) AS bks " +
+            "LIMIT 1) AS bks ON true " +
             "WHERE it.id IN (?1)", nativeQuery = true)
-    List<Booking> findAllByItemInAndStatusNotInAndStartBeforeOrderByStartDesc(List<Item> items, LocalDateTime currentTime);
+    List<Booking> findAllByItemInAndStatusNotInAndStartBeforeOrderByStartDesc(List<Item> items, LocalDateTime currentTime);*/
 
-/*
-    @Query(value = "SELECT bks.item_id, bks.id, bks.start_time, bks.end_time, bks.user_id, bks.status " +
-            "FROM items AS it " +
-            "WHERE it.id IN (?1) AND " +
-            "EXISTS " +
-            "(SELECT bk.id, bk.item_id, bk.start_time, bk.end_time, bk.user_id, bk.status " +
+    @Query(value = "SELECT DISTINCT ON (item_id)" +
+            "bk.id, bk.item_id, bk.start_time, bk.end_time, bk.user_id, bk.status " +
             "FROM bookings as bk " +
-            "WHERE it.id = bk.item_id " +
+            "WHERE bk.item_id IN (?1) " +
             "AND bk.status NOT IN ('CANCELLED', 'REJECTED') " +
             "AND bk.start_time < ?2 " +
-            "ORDER BY bk.start_time DESC " +
-            "LIMIT 1  AS bks)" +
-            "", nativeQuery = true)
+            "ORDER BY bk.item_id, bk.start_time DESC ", nativeQuery = true)
     List<Booking> findAllByItemInAndStatusNotInAndStartBeforeOrderByStartDesc(List<Item> items, LocalDateTime currentTime);
 
+
+/*            "AND id IN " +
+            "(SELECT DISTINCT ON bk.id " +
+            "FROM bookings as bk " +
+            "WHERE bk.status NOT IN ('CANCELLED', 'REJECTED') " +
+            "AND bk.start_time < ?2 " +
+            "ORDER BY bk.start_time DESC", nativeQuery = true)
+    List<Booking> findAllByItemInAndStatusNotInAndStartBeforeOrderByStartDesc(List<Item> items, LocalDateTime currentTime);*/
 
 /*    @Query(value = "SELECT * " +
             "FROM bookings AS bk " +
@@ -103,31 +105,37 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "LIMIT 1", nativeQuery = true)
        List<Booking> findAllByItemInAndStatusNotInAndStartAfterOrderByStartAsc(List<Item> items, LocalDateTime currentTime);*/
 
-    @Query(value = "SELECT bks.item_id, bks.id, bks.start_time, bks.end_time, bks.user_id, bks.status " +
+/*    @Query(value = "SELECT bks.item_id, bks.id, bks.start_time, bks.end_time, bks.user_id, bks.status " +
             "FROM items AS it " +
-            "CROSS JOIN LATERAL" +
+            "INNER JOIN LATERAL " +
             "(SELECT bk.id, bk.item_id, bk.start_time, bk.end_time, bk.user_id, bk.status " +
             "FROM bookings as bk " +
             "WHERE it.id = bk.item_id " +
             "AND bk.status NOT IN ('CANCELLED', 'REJECTED') " +
             "AND bk.start_time > ?2 " +
             "ORDER BY bk.start_time ASC " +
-            "LIMIT 1) AS bks " +
+            "LIMIT 1) AS bks ON true " +
             "WHERE it.id IN (?1)", nativeQuery = true)
-    List<Booking> findAllByItemInAndStatusNotInAndStartAfterOrderByStartAsc(List<Item> items, LocalDateTime currentTime);
-
-/*        @Query(value = "SELECT bks.item_id, bks.id, bks.start_time, bks.end_time, bks.user_id, bks.status " +
-            "FROM items AS it " +
-            "WHERE it.id IN (?1) AND " +
-            " EXISTS " +
-            "(SELECT bk.id, bk.item_id, bk.start_time, bk.end_time, bk.user_id, bk.status " +
-            "FROM bookings as bk " +
-            "WHERE it.id = bk.item_id " +
-            "AND bk.status NOT IN ('CANCELLED', 'REJECTED') " +
-            "AND bk.start_time > ?2 " +
-            "ORDER BY bk.start_time ASC " +
-            "LIMIT 1 AS bks)" +
-            "", nativeQuery = true)
     List<Booking> findAllByItemInAndStatusNotInAndStartAfterOrderByStartAsc(List<Item> items, LocalDateTime currentTime);*/
 
+/*        @Query(value = "SELECT * " +
+            "FROM bookings as bks " +
+            "WHERE bks.item_id IN (?1) " +
+            "AND bks.id IN " +
+            "(SELECT bk.id " +
+            "FROM bookings as bk " +
+            "WHERE bk.status NOT IN ('CANCELLED', 'REJECTED') " +
+            "AND bk.start_time > ?2 " +
+            "ORDER BY bk.start_time ASC " +
+            "LIMIT 1)", nativeQuery = true)
+    List<Booking> findAllByItemInAndStatusNotInAndStartAfterOrderByStartAsc(List<Item> items, LocalDateTime currentTime);*/
+
+    @Query(value = "SELECT DISTINCT ON (item_id)" +
+            "bk.id, bk.item_id, bk.start_time, bk.end_time, bk.user_id, bk.status " +
+            "FROM bookings as bk " +
+            "WHERE bk.item_id IN (?1) " +
+            "AND bk.status NOT IN ('CANCELLED', 'REJECTED') " +
+            "AND bk.start_time > ?2 " +
+            "ORDER BY bk.item_id, bk.start_time ASC ", nativeQuery = true)
+    List<Booking> findAllByItemInAndStatusNotInAndStartAfterOrderByStartAsc(List<Item> items, LocalDateTime currentTime);
 }
