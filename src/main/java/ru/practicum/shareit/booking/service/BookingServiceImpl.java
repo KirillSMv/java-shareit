@@ -171,7 +171,7 @@ public class BookingServiceImpl implements BookingService {
 
     private void checkIfBookingStatusAllowsApproval(Booking booking, boolean approved) {
         if (booking.getStatus() == Status.APPROVED && approved) {
-            log.error("Статус брони уже 'Approved' и не может быть подтверждена");
+            log.error("Статус брони уже 'Approved' и поэтому не может быть подтверждена");
             throw new IllegalArgumentException("Статус брони уже 'Approved' и не может быть подтверждена");
         }
         if (booking.getStatus() == Status.CANCELLED) {
