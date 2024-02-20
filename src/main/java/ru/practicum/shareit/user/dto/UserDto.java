@@ -24,5 +24,4 @@ public class UserDto {
     @Size(max = 100, message = "Слишком длинный email (лимит: {max} символов)",
             groups = {OnCreate.class, OnUpdate.class})
     private String email;
-
 }

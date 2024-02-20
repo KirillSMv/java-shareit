@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
  */
 
 @Data
-public class ItemDto {
+public class ItemDtoFromUser {
     private Long id;
 
     @NotBlank(groups = OnCreate.class, message = "Имя не должно быть пустым")
