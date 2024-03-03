@@ -158,29 +158,29 @@
                     <configuration>
                         <output>file</output>
                         <excludes>
-                            <excluded>**/ErrorHandler.class</excluded>
-                            <excluded>**/ShareItApp.class</excluded>
-                            <excluded>**/JsonConfiguration.class</excluded>
-                            <excluded>**/QUser.class</excluded>
-                            <excluded>**/QItem.class</excluded>
-                            <excluded>**/QItemRequest.class</excluded>
-                            <excluded>**/QBooking.class</excluded>
-                            <excluded>**/UserDto.class</excluded>
-                            <excluded>**/BookingDto.class</excluded>
-                            <excluded>**/BookingDtoToUser.class</excluded>
-                            <excluded>**/ItemRequestInfoDto.class</excluded>
-                            <excluded>**/ItemRequestFromUserDto.class</excluded>
-                            <excluded>**/ItemDtoWithComments.class</excluded>
-                            <excluded>**/CommentDto.class</excluded>
-                            <excluded>**/CommentDtoFromUser.class</excluded>
-                            <excluded>**/ItemDtoFromOrToUser.class</excluded>
-                            <excluded>**/ItemDtoToUser.class</excluded>
-                            <excluded>**/Comment.class</excluded>
-                            <excluded>**/Item.class</excluded>
-                            <excluded>**/ItemRequestToUserDto.class</excluded>
-                            <excluded>**/ItemRequest.class</excluded>
-                            <excluded>**/UserDtoWithIdOnly.class</excluded>
-                            <excluded>**/User.class</excluded>
+                            <excluded>**/ErrorHandler.java</excluded>
+                            <excluded>**/ShareItApp.java</excluded>
+                            <excluded>**/JsonConfiguration.java</excluded>
+                            <excluded>**/QUser.java</excluded>
+                            <excluded>**/QItem.java</excluded>
+                            <excluded>**/QItemRequest.java</excluded>
+                            <excluded>**/QBooking.java</excluded>
+                            <excluded>**/UserDto.java</excluded>
+                            <excluded>**/BookingDto.java</excluded>
+                            <excluded>**/BookingDtoToUser.java</excluded>
+                            <excluded>**/ItemRequestInfoDto.java</excluded>
+                            <excluded>**/ItemRequestFromUserDto.java</excluded>
+                            <excluded>**/ItemDtoWithComments.java</excluded>
+                            <excluded>**/CommentDto.java</excluded>
+                            <excluded>**/CommentDtoFromUser.java</excluded>
+                            <excluded>**/ItemDtoFromOrToUser.java</excluded>
+                            <excluded>**/ItemDtoToUser.java</excluded>
+                            <excluded>**/Comment.java</excluded>
+                            <excluded>**/Item.java</excluded>
+                            <excluded>**/ItemRequestToUserDto.java</excluded>
+                            <excluded>**/ItemRequest.java</excluded>
+                            <excluded>**/UserDtoWithIdOnly.java</excluded>
+                            <excluded>**/User.java</excluded>
                         </excludes>
                     </configuration>
 
