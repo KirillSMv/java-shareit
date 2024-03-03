@@ -12,6 +12,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 
 @Slf4j
@@ -101,6 +102,6 @@ public class ErrorHandler {
         PrintStream out2 = new PrintStream(out1);
         e.printStackTrace(out2);
         out2.close();
-        return out1.toString();
+        return out1.toString(StandardCharsets.UTF_8);
     }
 }
