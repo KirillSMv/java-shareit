@@ -158,9 +158,14 @@
                     <configuration>
                         <output>file</output>
 							<excludes>
-								<excluded>**/ErrorHandler.java</excluded>
-								<excluded>**/ShareItApp.java</excluded>
-								<excluded>**/JsonConfiguration.java</excluded>
+								<excluded>**/ErrorHandler.class</excluded>
+								<excluded>**/ShareItApp.class</excluded>
+								<excluded>**/JsonConfiguration.class</excluded>
+								<excluded>**/QUser.class</excluded>
+								<excluded>**/QItem.class</excluded>
+								<excluded>**/QItemRequest.class</excluded>
+								<excluded>**/QBooking.class</excluded>
+								<excluded>**/QComment.class</excluded>
 							</excludes>
                     </configuration>
                     <executions>
