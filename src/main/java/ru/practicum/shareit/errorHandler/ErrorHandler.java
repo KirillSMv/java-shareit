@@ -6,7 +6,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.exceptions.*;
+import ru.practicum.shareit.exceptions.AuthorizationException;
+import ru.practicum.shareit.exceptions.BookingCannotBeProcessedException;
+import ru.practicum.shareit.exceptions.ObjectAlreadyExistsException;
+import ru.practicum.shareit.exceptions.ObjectNotFoundException;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
@@ -37,13 +40,6 @@ public class ErrorHandler {
     public ErrorResponse handle(final IllegalArgumentException e) {
         String stackTrace = getStackTraceAsString(e);
         log.error("Произошла ошибка: {}", stackTrace);
-        return new ErrorResponse(e.getMessage(), "проверьте переданные параметры");
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handle(final NoEnumValueExistsException e) {
-        log.error("Unknown state: UNSUPPORTED_STATUS, {}", e.getMessage());
         return new ErrorResponse(e.getMessage(), "проверьте переданные параметры");
     }
 
