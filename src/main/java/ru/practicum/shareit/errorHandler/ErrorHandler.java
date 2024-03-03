@@ -98,10 +98,10 @@ public class ErrorHandler {
     }
 
     private String getStackTraceAsString(Throwable e) {
-        ByteArrayOutputStream out1 = new ByteArrayOutputStream();
-        PrintStream out2 = new PrintStream(out1);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream out2 = new PrintStream(outputStream, false, StandardCharsets.UTF_8);
         e.printStackTrace(out2);
         out2.close();
-        return out1.toString(StandardCharsets.UTF_8);
+        return outputStream.toString(StandardCharsets.UTF_8);
     }
 }
