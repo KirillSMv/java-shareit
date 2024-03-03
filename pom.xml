@@ -165,7 +165,13 @@
 								<excluded>**/QItem.class</excluded>
 								<excluded>**/QItemRequest.class</excluded>
 								<excluded>**/QBooking.class</excluded>
-								<excluded>**/QComment.class</excluded>
+								<excluded>**/UserDto.class</excluded>
+								<excluded>**/BookingDto.class</excluded>
+								<excluded>**/BookingDtoToUser.class</excluded>
+								<excluded>**/ItemRequestInfoDto.class</excluded>
+								<excluded>**/ItemRequestFromUserDto.class</excluded>
+								<excluded>**/ItemDtoWithComments.class</excluded>
+								<excluded>**/ItemDtoToUser.class</excluded>
 							</excludes>
                     </configuration>
                     <executions>
