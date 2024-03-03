@@ -2,12 +2,16 @@ package ru.practicum.shareit.errorHandler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.exceptions.*;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.sql.SQLException;
 
 @Slf4j
@@ -30,21 +34,36 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handle(final IllegalArgumentException e) {
-        log.error("Ошибка валидации: {}", e.getMessage());
-        return new ErrorResponse("Ошибка валидации: ", e.getMessage());
+        String stackTrace = getStackTraceAsString(e);
+        log.error("Произошла ошибка: {}", stackTrace);
+        return new ErrorResponse(e.getMessage(), "проверьте переданные параметры");
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handle(final NoEnumValueExistsException e) {
         log.error("Unknown state: UNSUPPORTED_STATUS, {}", e.getMessage());
-        return new ErrorResponse("Unknown state: UNSUPPORTED_STATUS", e.getMessage());
+        return new ErrorResponse(e.getMessage(), "проверьте переданные параметры");
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handle(final ConstraintViolationException e) {
         log.error("Ошибка валидации: {}, {}", e.getCause(), e.getMessage());
+        return new ErrorResponse("Ошибка валидации", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handle(final MethodArgumentNotValidException e) {
+        log.error("Ошибка валидации: {}", e.getMessage());
+        return new ErrorResponse("Ошибка валидации", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handle(final ValidationException e) {
+        log.error("Ошибка валидации: {}", e.getMessage());
         return new ErrorResponse("Ошибка валидации", e.getMessage());
     }
 
@@ -67,5 +86,21 @@ public class ErrorHandler {
     public ErrorResponse handle(final SQLException e) {
         log.error("Произошла ошибка: {}", e.getMessage());
         return new ErrorResponse("Произошла ошибка: ", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handle(final Throwable e) {
+        String stackTrace = getStackTraceAsString(e);
+        log.error("Произошла ошибка: {}", stackTrace);
+        return new ErrorResponse("Произошла ошибка: ", e.getMessage());
+    }
+
+    private String getStackTraceAsString(Throwable e) {
+        ByteArrayOutputStream out1 = new ByteArrayOutputStream();
+        PrintStream out2 = new PrintStream(out1);
+        e.printStackTrace(out2);
+        out2.close();
+        return out1.toString();
     }
 }

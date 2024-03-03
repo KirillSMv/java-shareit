@@ -1,6 +1,6 @@
 package ru.practicum.shareit.booking.enums;
 
-import ru.practicum.shareit.exceptions.NoEnumValueExistsException;
+import java.util.Optional;
 
 public enum BookingState {
     ALL,
@@ -10,14 +10,13 @@ public enum BookingState {
     WAITING,
     REJECTED;
 
-    public static BookingState convert(String stateParam) {
-        BookingState bookingState;
-        try {
-            bookingState = valueOf(stateParam.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new NoEnumValueExistsException(String.format("Проверьте правильность переданных параметров: stateParam = %s", stateParam));
+    public static Optional<BookingState> convert(String stateParam) {
+        for (BookingState value : BookingState.values()) {
+            if (value.name().equals(stateParam)) {
+                return Optional.of(value);
+            }
         }
-        return bookingState;
+        return Optional.empty();
     }
 }
 

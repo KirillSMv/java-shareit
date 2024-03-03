@@ -1,19 +1,20 @@
 package ru.practicum.shareit.item.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.validationGroups.OnCreate;
 import ru.practicum.shareit.validationGroups.OnUpdate;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
-/**
- * TODO Sprint add-controllers.
- */
-
 @Data
-public class ItemDtoFromUser {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ItemDtoFromOrToUser {
     private Long id;
 
     @NotBlank(groups = OnCreate.class, message = "Имя не должно быть пустым")
@@ -28,4 +29,7 @@ public class ItemDtoFromUser {
 
     @NotNull(groups = OnCreate.class, message = "Статус не должен быть пустым")
     private Boolean available;
+
+    @Positive
+    private Long requestId;
 }

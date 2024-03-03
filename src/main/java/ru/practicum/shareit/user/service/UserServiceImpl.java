@@ -39,12 +39,12 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User updateUser(long id, User user) {
-        User savedUser = userRepository.findById(id).orElseThrow(() -> {
+        User userForUpdate = userRepository.findById(id).orElseThrow(() -> {
             log.error("Пользователь с id {} не найден", id);
             return new ObjectNotFoundException(String.format("Пользователь с id %d не найден", id));
         });
-        updateRequiredFields(savedUser, user);
-        return savedUser;
+        updateRequiredFields(userForUpdate, user);
+        return userRepository.save(userForUpdate);
     }
 
     @Transactional

@@ -1,17 +1,16 @@
 package ru.practicum.shareit.item.dto.mapper;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.model.Comment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public class CommentDtoMapper {
 
-    public static CommentDto toCommentDto(Comment comment) {
+    public CommentDto toCommentDto(Comment comment) {
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
         commentDto.setText(comment.getText());
@@ -20,7 +19,7 @@ public class CommentDtoMapper {
         return commentDto;
     }
 
-    public static List<CommentDto> toCommentDtoList(List<Comment> comments) {
+    public List<CommentDto> toCommentDtoList(List<Comment> comments) {
         if (comments.isEmpty()) {
             return new ArrayList<>();
         }

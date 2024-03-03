@@ -28,12 +28,12 @@ public class Booking {
     @Column(name = "end_time", nullable = false)
     private LocalDateTime end;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     @ToString.Exclude
     private Item item;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ToString.Exclude
     private User booker;

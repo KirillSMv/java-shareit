@@ -16,15 +16,15 @@ public interface BookingService {
 
     Booking processBooking(long userId, long bookingId, boolean approved);
 
-    List<Booking> getBookingsForUser(long userId, BookingState bookingState);
+    List<Booking> getBookingsForUser(long userId, BookingState bookingState, int page, int size);
 
-    List<Booking> getAllBookingsForUserItems(long userId, BookingState bookingState);
+    List<Booking> getAllBookingsForUserItems(long userId, BookingState bookingState, int page, int size);
 
     Booking getLastOrNextBooking(Item item, boolean isLast);
 
-    Boolean checkIfUserRentedItem(User user, Item item);
+    boolean checkIfUserRentedItem(User user, Item item);
 
-    List<Booking> findAllLastBookingsForItems(List<Item> items);
+    List<Booking> findAllLastAndNextBookingsForItems(List<Item> items, int page, int size);
 
-    List<Booking> findAllNextBookingsForItems(List<Item> items);  //todo
+    //List<Booking> findAllNextBookingsForItems(List<Item> items, int page, int size);
 }
