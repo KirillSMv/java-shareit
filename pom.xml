@@ -157,23 +157,33 @@
                     <version>0.8.8</version>
                     <configuration>
                         <output>file</output>
-							<excludes>
-								<excluded>**/ErrorHandler.class</excluded>
-								<excluded>**/ShareItApp.class</excluded>
-								<excluded>**/JsonConfiguration.class</excluded>
-								<excluded>**/QUser.class</excluded>
-								<excluded>**/QItem.class</excluded>
-								<excluded>**/QItemRequest.class</excluded>
-								<excluded>**/QBooking.class</excluded>
-								<excluded>**/UserDto.class</excluded>
-								<excluded>**/BookingDto.class</excluded>
-								<excluded>**/BookingDtoToUser.class</excluded>
-								<excluded>**/ItemRequestInfoDto.class</excluded>
-								<excluded>**/ItemRequestFromUserDto.class</excluded>
-								<excluded>**/ItemDtoWithComments.class</excluded>
-								<excluded>**/ItemDtoToUser.class</excluded>
-							</excludes>
+                        <excludes>
+                            <excluded>**/ErrorHandler.class</excluded>
+                            <excluded>**/ShareItApp.class</excluded>
+                            <excluded>**/JsonConfiguration.class</excluded>
+                            <excluded>**/QUser.class</excluded>
+                            <excluded>**/QItem.class</excluded>
+                            <excluded>**/QItemRequest.class</excluded>
+                            <excluded>**/QBooking.class</excluded>
+                            <excluded>**/UserDto.class</excluded>
+                            <excluded>**/BookingDto.class</excluded>
+                            <excluded>**/BookingDtoToUser.class</excluded>
+                            <excluded>**/ItemRequestInfoDto.class</excluded>
+                            <excluded>**/ItemRequestFromUserDto.class</excluded>
+                            <excluded>**/ItemDtoWithComments.class</excluded>
+                            <excluded>**/CommentDto.class</excluded>
+                            <excluded>**/CommentDtoFromUser.class</excluded>
+                            <excluded>**/ItemDtoFromOrToUser.class</excluded>
+                            <excluded>**/ItemDtoToUser.class</excluded>
+                            <excluded>**/Comment.class</excluded>
+                            <excluded>**/Item.class</excluded>
+                            <excluded>**/ItemRequestToUserDto.class</excluded>
+                            <excluded>**/ItemRequest.class</excluded>
+                            <excluded>**/UserDtoWithIdOnly.class</excluded>
+                            <excluded>**/User.class</excluded>
+                        </excludes>
                     </configuration>
+
                     <executions>
                         <execution>
                             <id>jacoco-initialize</id>
@@ -269,6 +279,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
+
                     </plugin>
                 </plugins>
             </build>
