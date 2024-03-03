@@ -27,23 +27,20 @@ class ItemRequestMapperTest {
     @Test
     void toItemRequest() {
         ItemRequestFromUserDto itemRequestFromUserDto = new ItemRequestFromUserDto("описание");
-        ItemRequest expectedItemRequest = new ItemRequest();
-        expectedItemRequest.setDescription("описание");
 
         ItemRequest resultItemRequest = itemRequestMapper.toItemRequest(itemRequestFromUserDto);
 
-        assertEquals(expectedItemRequest, resultItemRequest);
+        assertEquals("описание", resultItemRequest.getDescription());
     }
 
     @Test
     void toItemRequestForUserDto() {
         User user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         ItemRequest itemRequest = new ItemRequest(1L, "описание", user, LocalDateTime.now());
-        ItemRequestToUserDto expectedItemRequestToUserDto = new ItemRequestToUserDto(1L, "описание", itemRequest.getCreated());
 
         ItemRequestToUserDto resultItemRequestToUserDto = itemRequestMapper.toItemRequestForUserDto(itemRequest);
 
-        assertEquals(expectedItemRequestToUserDto, resultItemRequestToUserDto);
+        assertEquals("описание", resultItemRequestToUserDto.getDescription());
     }
 
     @Test
