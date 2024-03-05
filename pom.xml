@@ -157,31 +157,6 @@
                     <version>0.8.8</version>
                     <configuration>
                         <output>file</output>
-                        <excludes>
-                            <excluded>**/ErrorHandler.java</excluded>
-                            <excluded>**/ShareItApp.java</excluded>
-                            <excluded>**/JsonConfiguration.java</excluded>
-                            <excluded>**/QUser.java</excluded>
-                            <excluded>**/QItem.java</excluded>
-                            <excluded>**/QItemRequest.java</excluded>
-                            <excluded>**/QBooking.java</excluded>
-                            <excluded>**/UserDto.java</excluded>
-                            <excluded>**/BookingDto.java</excluded>
-                            <excluded>**/BookingDtoToUser.java</excluded>
-                            <excluded>**/ItemRequestInfoDto.java</excluded>
-                            <excluded>**/ItemRequestFromUserDto.java</excluded>
-                            <excluded>**/ItemDtoWithComments.java</excluded>
-                            <excluded>**/CommentDto.java</excluded>
-                            <excluded>**/CommentDtoFromUser.java</excluded>
-                            <excluded>**/ItemDtoFromOrToUser.java</excluded>
-                            <excluded>**/ItemDtoToUser.java</excluded>
-                            <excluded>**/Comment.java</excluded>
-                            <excluded>**/Item.java</excluded>
-                            <excluded>**/ItemRequestToUserDto.java</excluded>
-                            <excluded>**/ItemRequest.java</excluded>
-                            <excluded>**/UserDtoWithIdOnly.java</excluded>
-                            <excluded>**/User.java</excluded>
-                        </excludes>
                     </configuration>
 
                     <executions>
