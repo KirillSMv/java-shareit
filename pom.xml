@@ -158,7 +158,6 @@
                     <configuration>
                         <output>file</output>
                     </configuration>
-
                     <executions>
                         <execution>
                             <id>jacoco-initialize</id>
@@ -254,7 +253,6 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-
                     </plugin>
                 </plugins>
             </build>
