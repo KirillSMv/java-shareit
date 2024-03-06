@@ -61,7 +61,7 @@ class UserControllerTest {
 
     @Test
     @SneakyThrows
-    void add() {
+    void addTest_returnUser() {
         when(userService.add((user))).thenReturn(user);
         when(userDtoMapper.toUser(userDto)).thenReturn(user);
         when(userDtoMapper.toDto(user)).thenReturn(userDto);
@@ -78,7 +78,7 @@ class UserControllerTest {
 
     @SneakyThrows
     @Test
-    void updateUser() {
+    void updateUserTest_returnUpdatedUser() {
         when(userService.updateUser(requesterId, user)).thenReturn(user);
         when(userDtoMapper.toUser(userDto)).thenReturn(user);
         when(userDtoMapper.toDto(user)).thenReturn(userDto);
@@ -95,7 +95,7 @@ class UserControllerTest {
 
     @Test
     @SneakyThrows
-    void getById() {
+    void getByIdTest_whenExists_thenReturnUser() {
         long userId = 1L;
         when(userService.getById(userId)).thenReturn(user);
         when(userDtoMapper.toDto(user)).thenReturn(userDto);
@@ -109,7 +109,7 @@ class UserControllerTest {
 
     @Test
     @SneakyThrows
-    void getAll() {
+    void getAllTest_whenUserExists_thenReturnListOfUser() {
         when(userService.getAll()).thenReturn(List.of(user, anotherUser));
         when(userDtoMapper.toDto(user)).thenReturn(userDto);
         when(userDtoMapper.toDto(anotherUser)).thenReturn(anotherUserDto);
@@ -127,7 +127,7 @@ class UserControllerTest {
 
     @Test
     @SneakyThrows
-    void deleteUserById() {
+    void deleteUserByIdTest_UserDeleted() {
         Mockito.doNothing().when(userService).deleteUserById(anyLong());
 
         mvc.perform(delete("/users/{userId}", requesterId))

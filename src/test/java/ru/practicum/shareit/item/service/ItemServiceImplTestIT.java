@@ -24,7 +24,7 @@ class ItemServiceImplTestIT {
     private final ItemServiceImpl itemService;
 
     @Test
-    void addTest_returnItem() {
+    void addTest_thenReturnItem() {
         User user = new User();
         user.setName("Ilya");
         user.setEmail("ilya@yandex.ru");
@@ -47,6 +47,6 @@ class ItemServiceImplTestIT {
         Assertions.assertThat(itemDtoFromOrToUser.getName()).isEqualTo(savedItem.getName());
         Assertions.assertThat(itemDtoFromOrToUser.getDescription()).isEqualTo(savedItem.getDescription());
         Assertions.assertThat(itemDtoFromOrToUser.getAvailable()).isEqualTo(savedItem.getAvailable());
-        Assertions.assertThat(itemDtoFromOrToUser.getRequestId()).isEqualTo(savedItem.getRequest());
+        Assertions.assertThat(itemDtoFromOrToUser.getRequestId()).isEqualTo(null);
     }
 }

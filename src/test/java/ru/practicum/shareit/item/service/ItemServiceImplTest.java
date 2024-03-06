@@ -42,47 +42,39 @@ class ItemServiceImplTest {
 
     @Mock
     private ItemRepository itemRepository;
-
     @Mock
     private UserRepository userRepository;
-
     @Mock
     private BookingService bookingService;
-
     @Mock
     private CommentRepository commentRepository;
-
     @Mock
     private ItemRequestRepository itemRequestRepository;
-
     @Mock
     private ItemDtoMapper itemDtoMapper;
-
     @Mock
     private BookingDtoMapper bookingDtoMapper;
-
     @Mock
     private CommentDtoMapper commentDtoMapper;
-
-
     @InjectMocks
     private ItemServiceImpl itemServiceImpl;
-
     @Captor
     private ArgumentCaptor<Item> itemArgumentCaptor;
-
     @Captor
     private ArgumentCaptor<Comment> commentArgumentCaptor;
+
 
     private static final long requesterUserId = 1L;
     private static final long itemId = 1L;
 
 
 /*    В тестах сервисов я в начале сделал инициализацию переменных в методе с аннотацией @BeforeEach, потом подумал, что наверное нагляднее
-      сделать в каждом методе переменные, которые используются. Хотя тогда получается дублирование кода..
-      Как рекомендуется делать в целом в тестах?
+      сделать в каждом методе переменные, которые используются. Хотя тогда получается дублирование кода и дольше..
+      Как лучше делать в целом в тестах?
+*/
 
 
+/*
     private User user;
     private ItemRequest itemRequest;
     private ItemRequestFromUserDto itemRequestFromUserDto;

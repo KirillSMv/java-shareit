@@ -17,7 +17,7 @@ class UserDtoMapperTest {
     }
 
     @Test
-    void toDto() {
+    void toDtoTest_returnDto() {
         User user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         UserDto expectedUserDto = new UserDto(1L, "Vladimir", "vladimir@yandex.ru");
 
@@ -27,7 +27,7 @@ class UserDtoMapperTest {
     }
 
     @Test
-    void toUser() {
+    void toUserTest_returnUser() {
         UserDto userDto = new UserDto(null, "Vladimir", "vladimir@yandex.ru");
         User expectedUser = new User(null, "Vladimir", "vladimir@yandex.ru");
 

@@ -29,7 +29,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,19 +39,14 @@ class ItemControllerTestIT {
 
     @MockBean
     private ItemService itemService;
-
     @MockBean
     private ItemDtoMapper itemDtoMapper;
-
     @MockBean
     private CommentDtoMapper commentDtoMapper;
-
     @Autowired
     private ItemController itemController;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private MockMvc mvc;
 
@@ -81,7 +76,7 @@ class ItemControllerTestIT {
     }
 
     @Test
-    void addTest() throws Exception {
+    void addTestTest_whenItemDtoValid_thenReturnItem() throws Exception {
         when(itemService.add(requesterId, itemDtoFromOrToUser)).thenReturn(item);
         when(itemDtoMapper.toDto(item)).thenReturn(itemDtoFromOrToUser);
 
@@ -99,7 +94,75 @@ class ItemControllerTestIT {
     }
 
     @Test
-    void updateItemTest() throws Exception {
+    void addTestTest_whenItemDtoNameIsBank_thenStatusIsBadRequest() throws Exception {
+        ItemDtoFromOrToUser itemDtoFromOrToUser = new ItemDtoFromOrToUser(1L, "", "описание", true, null);
+
+        when(itemService.add(requesterId, itemDtoFromOrToUser)).thenReturn(item);
+        when(itemDtoMapper.toDto(item)).thenReturn(itemDtoFromOrToUser);
+
+        mvc.perform(post("/items")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-Sharer-User-Id", requesterId)
+                        .content(objectMapper.writeValueAsString(itemDtoFromOrToUser)))
+                .andExpect(status().isBadRequest());
+
+        verify(itemService, never()).add(requesterId, itemDtoFromOrToUser);
+    }
+
+    @Test
+    void addTestTest_whenItemDtoDescriptionIsBank_thenStatusIsBadRequest() throws Exception {
+        ItemDtoFromOrToUser itemDtoFromOrToUser = new ItemDtoFromOrToUser(1L, "имя", "", true, null);
+
+        when(itemService.add(requesterId, itemDtoFromOrToUser)).thenReturn(item);
+        when(itemDtoMapper.toDto(item)).thenReturn(itemDtoFromOrToUser);
+
+        mvc.perform(post("/items")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-Sharer-User-Id", requesterId)
+                        .content(objectMapper.writeValueAsString(itemDtoFromOrToUser)))
+                .andExpect(status().isBadRequest());
+
+        verify(itemService, never()).add(requesterId, itemDtoFromOrToUser);
+    }
+
+    @Test
+    void addTestTest_whenItemDtoRequestIdIsNegative_thenStatusIsBadRequest() throws Exception {
+        ItemDtoFromOrToUser itemDtoFromOrToUser = new ItemDtoFromOrToUser(1L, "имя", "описание", true, -1L);
+
+        when(itemService.add(requesterId, itemDtoFromOrToUser)).thenReturn(item);
+        when(itemDtoMapper.toDto(item)).thenReturn(itemDtoFromOrToUser);
+
+        mvc.perform(post("/items")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-Sharer-User-Id", requesterId)
+                        .content(objectMapper.writeValueAsString(itemDtoFromOrToUser)))
+                .andExpect(status().isBadRequest());
+
+        verify(itemService, never()).add(requesterId, itemDtoFromOrToUser);
+    }
+
+    @Test
+    void addTestTest_whenItemDtoAvailableFiledIsNull_thenStatusIsBadRequest() throws Exception {
+        ItemDtoFromOrToUser itemDtoFromOrToUser = new ItemDtoFromOrToUser(1L, "имя", "описанме", null, null);
+
+        when(itemService.add(requesterId, itemDtoFromOrToUser)).thenReturn(item);
+        when(itemDtoMapper.toDto(item)).thenReturn(itemDtoFromOrToUser);
+
+        mvc.perform(post("/items")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-Sharer-User-Id", requesterId)
+                        .content(objectMapper.writeValueAsString(itemDtoFromOrToUser)))
+                .andExpect(status().isBadRequest());
+
+        verify(itemService, never()).add(requesterId, itemDtoFromOrToUser);
+    }
+
+    @Test
+    void updateItemTest_whenItemDtoValid_thenReturnUpdatedItem() throws Exception {
         when(itemService.updateItem(requesterId, item.getId(), item)).thenReturn(item);
         when(itemDtoMapper.toItem(itemDtoFromOrToUser)).thenReturn(item);
         when(itemDtoMapper.toDto(item)).thenReturn(itemDtoFromOrToUser);
@@ -118,7 +181,7 @@ class ItemControllerTestIT {
     }
 
     @Test
-    void getById() throws Exception {
+    void getByIdTest_whenItemExists_thenReturnItem() throws Exception {
         when(itemService.getWithBookingsById(requesterId, item.getId())).thenReturn(expectedItemDtoWithComments);
 
         mvc.perform(get("/items/{itemId}", item.getId())
@@ -141,7 +204,7 @@ class ItemControllerTestIT {
     }
 
     @Test
-    void getAllForUser() throws Exception {
+    void getAllForUserTest_whenItemExists_thenReturnListOfItem() throws Exception {
         int from = 0;
         int size = 1;
         when(itemService.getAllForUserPageable(requesterId, from / size, size)).thenReturn(List.of(expectedItemDtoWithComments));
@@ -169,7 +232,7 @@ class ItemControllerTestIT {
     }
 
     @Test
-    void search() throws Exception {
+    void searchTest_whenSearchForItemExists_thenReturnItem() throws Exception {
         int from = 1;
         int size = 1;
         String text = "описание";
@@ -191,7 +254,7 @@ class ItemControllerTestIT {
     }
 
     @Test
-    void addComment() throws Exception {
+    void addCommentTest_whenCommentDtoValid_thenReturnComment() throws Exception {
         String text = "описание";
         when(itemService.addComment(anyLong(), anyLong(), any(Comment.class))).thenReturn(comment);
         when(commentDtoMapper.toCommentDto(comment)).thenReturn(commentDto);

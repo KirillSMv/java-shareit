@@ -60,7 +60,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void addTest() throws Exception {
+    void addTest_whenItemRequestFromUserDtoIsValid_thenReturnItem() throws Exception {
         ItemRequestFromUserDto itemRequestFromUserDto = new ItemRequestFromUserDto("описание");
 
         when(itemRequestService.add(itemRequestFromUserDto, requesterId)).thenReturn(itemRequestToUserDto);
@@ -77,7 +77,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void getByIdTest() throws Exception {
+    void getByIdTest_whenItemExists_thenReturnItem() throws Exception {
         when(itemRequestService.getById(itemRequest.getId(), requesterId)).thenReturn(itemRequestInfoDto);
 
         mvc.perform(get("/requests/{requestId}", itemRequest.getId())
@@ -89,7 +89,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void getAllForUserTest() throws Exception {
+    void getAllForUserTest_whenItemExists_thenReturnListOfItem() throws Exception {
         when(itemRequestService.getAllForUser(requesterId)).thenReturn(List.of(itemRequestInfoDto));
 
         mvc.perform(get("/requests")
@@ -102,7 +102,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void testGetAllForUser() throws Exception {
+    void testGetAllForUserTest_whenItemExists_thenReturnListOfItem() throws Exception {
         int from = 0;
         int size = 1;
         when(itemRequestService.getAllFromOtherUsersPageable(owner.getId(), from / size, size)).thenReturn(List.of(itemRequestInfoDto));

@@ -26,7 +26,6 @@ class BookingServiceImplTestIT {
     private final BookingServiceImpl bookingService;
     private final EntityManager entityManager;
 
-
     @Test
     void processBooking() {
         User user = new User();

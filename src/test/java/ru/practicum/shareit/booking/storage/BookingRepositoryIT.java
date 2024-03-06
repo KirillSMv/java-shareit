@@ -23,7 +23,6 @@ class BookingRepositoryIT {
 
     @Autowired
     private BookingRepository bookingRepository;
-
     @Autowired
     private TestEntityManager testEntityManager;
 
@@ -32,7 +31,6 @@ class BookingRepositoryIT {
     private Item item;
     private ItemRequest itemRequest;
     private Booking booking;
-
 
     @BeforeEach
     void setUp() {
@@ -73,7 +71,7 @@ class BookingRepositoryIT {
 
 
     @Test
-    void findIfBookingTimeCrossed() {
+    void findIfBookingTimeCrossedTest_whenTimeCrossed_thenReturnBooking() {
         LocalDateTime start = LocalDateTime.of(2025, 10, 20, 10, 20, 10);
         LocalDateTime end = LocalDateTime.of(2025, 10, 20, 11, 20, 10);
 
@@ -85,7 +83,7 @@ class BookingRepositoryIT {
 
 
     @Test
-    void findAllByBookerOrderByStartDesc() {
+    void findAllByBookerOrderByStartDescTest_whenBookingExists_thenReturnListOfBooking() {
         int page = 0;
         int size = 1;
 
@@ -100,7 +98,7 @@ class BookingRepositoryIT {
     }
 
     @Test
-    void findAllByBookerAndStatus() {
+    void findAllByBookerAndStatusTest_whenBookingExists_thenReturnListOfBooking() {
         int page = 0;
         int size = 1;
 
@@ -115,7 +113,7 @@ class BookingRepositoryIT {
     }
 
     @Test
-    void findAllByBookerAndEndBeforeOrderByStartDesc() {
+    void findAllByBookerAndEndBeforeOrderByStartDescTest_whenBookingExists_thenReturnListOfBooking() {
         int page = 0;
         int size = 1;
 
@@ -138,7 +136,7 @@ class BookingRepositoryIT {
     }
 
     @Test
-    void findAllByBookerAndStartBeforeAndEndAfterOrderByStartDesc() {
+    void findAllByBookerAndStartBeforeAndEndAfterOrderByStartDescTest_whenBookingExists_thenReturnListOfBooking() {
         int page = 0;
         int size = 1;
 
@@ -164,7 +162,7 @@ class BookingRepositoryIT {
     }
 
     @Test
-    void findAllByBookerAndStartAfterOrderByStartDesc() {
+    void findAllByBookerAndStartAfterOrderByStartDescTest_whenBookingExists_thenReturnListOfBooking() {
         int page = 0;
         int size = 1;
         List<Booking> bookings = bookingRepository.findAllByBookerAndStartAfterOrderByStartDesc(user,
@@ -180,7 +178,7 @@ class BookingRepositoryIT {
     }
 
     @Test
-    void findAllByItemOwnerOrderByStartDesc() {
+    void findAllByItemOwnerOrderByStartDescTest_whenBookingExists_thenReturnListOfBooking() {
         int page = 0;
         int size = 1;
         List<Booking> bookings = bookingRepository.findAllByItemOwnerOrderByStartDesc(owner,
@@ -195,7 +193,7 @@ class BookingRepositoryIT {
     }
 
     @Test
-    void findAllByItemOwnerAndStatusOrderByStartDesc() {
+    void findAllByItemOwnerAndStatusOrderByStartDescTest_whenBookingExists_thenReturnListOfBooking() {
         int page = 0;
         int size = 1;
         List<Booking> bookings = bookingRepository.findAllByItemOwnerAndStatusOrderByStartDesc(owner, Status.WAITING,
@@ -210,7 +208,7 @@ class BookingRepositoryIT {
     }
 
     @Test
-    void findAllByItemOwnerAndEndBeforeOrderByStartDesc() {
+    void findAllByItemOwnerAndEndBeforeOrderByStartDescTest_whenBookingExists_thenReturnListOfBooking() {
         int page = 0;
         int size = 1;
         booking = new Booking();
@@ -233,7 +231,7 @@ class BookingRepositoryIT {
     }
 
     @Test
-    void findAllByItemOwnerAndStartBeforeAndEndAfterOrderByStartDesc() {
+    void findAllByItemOwnerAndStartBeforeAndEndAfterOrderByStartDescTest_whenBookingExists_thenReturnListOfBooking() {
         int page = 0;
         int size = 1;
         booking = new Booking();
@@ -259,7 +257,7 @@ class BookingRepositoryIT {
     }
 
     @Test
-    void findAllByItemOwnerAndStartAfterOrderByStartDesc() {
+    void findAllByItemOwnerAndStartAfterOrderByStartDescTest_whenBookingExists_thenReturnListOfBooking() {
         int page = 0;
         int size = 1;
         List<Booking> bookings = bookingRepository.findAllByItemOwnerAndStartAfterOrderByStartDesc(owner,
@@ -276,7 +274,7 @@ class BookingRepositoryIT {
     }
 
     @Test
-    void findFirstByItemAndStatusNotInAndStartBeforeOrderByStartDesc() {
+    void findFirstByItemAndStatusNotInAndStartBeforeOrderByStartDescTest_whenBookingExists_thenReturnBooking() {
         booking = new Booking();
         booking.setStart(LocalDateTime.of(2022, 10, 20, 10, 10, 10));
         booking.setEnd(LocalDateTime.of(2025, 10, 20, 11, 10, 10));
@@ -298,7 +296,7 @@ class BookingRepositoryIT {
     }
 
     @Test
-    void findFirstByItemAndStatusNotInAndStartAfterOrderByStartAsc() {
+    void findFirstByItemAndStatusNotInAndStartAfterOrderByStartAscTest_whenBookingExists_thenReturnBooking() {
         Booking resultBooking = bookingRepository.findFirstByItemAndStatusNotInAndStartAfterOrderByStartAsc(item,
                 List.of(Status.REJECTED),
                 LocalDateTime.now());
@@ -312,7 +310,7 @@ class BookingRepositoryIT {
     }
 
     @Test
-    void countByBookerAndItemAndEndBefore() {
+    void countByBookerAndItemAndEndBeforeTest_whenBookingExists_thenReturnNumberMoreThanZero() {
         booking = new Booking();
         booking.setStart(LocalDateTime.of(2022, 10, 20, 10, 10, 10));
         booking.setEnd(LocalDateTime.of(2023, 10, 20, 11, 10, 10));
@@ -328,7 +326,7 @@ class BookingRepositoryIT {
     }
 
     @Test
-    void findAllUnion() {
+    void findAllUnionTest_whenBookingExists_thenReturnListOfBooking() {
         int page = 0;
         int size = 1;
         List<Booking> bookings = bookingRepository.findAllUnion(List.of(item),

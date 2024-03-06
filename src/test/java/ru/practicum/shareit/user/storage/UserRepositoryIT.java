@@ -22,7 +22,7 @@ class UserRepositoryIT {
     }
 
     @Test
-    void findByEmail() {
+    void findByEmailTest_whenUserFound_thenReturnUserWithThisEmail() {
         Optional<User> savedUser = userRepository.findByEmail("kirill@email.com");
 
         assertThat(savedUser).isPresent();

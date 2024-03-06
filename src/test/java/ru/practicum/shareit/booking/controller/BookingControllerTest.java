@@ -50,13 +50,10 @@ class BookingControllerTest {
     private BookingDtoMapper bookingDtoMapper;
     @InjectMocks
     private BookingController bookingController;
-
     private ObjectMapper objectMapper;
-
     private MockMvc mvc;
 
     private final Long requesterId = 1L;
-
     private User user;
     private User owner;
     private Item item;
@@ -105,7 +102,7 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
-    void addTest_returnBookingDtoToUser() {
+    void addTestTest_returnBookingDtoToUser() {
         Booking booking = new Booking(1L, bookingForAdding.getStart(), bookingForAdding.getEnd(),
                 bookingForAdding.getItem(), bookingForAdding.getBooker(), Status.WAITING);
 
@@ -133,7 +130,7 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
-    void addTest_whenNotValidBooking_thenThrowNestedServletExceptionDueToValidationException() {
+    void addTestTest_whenNotValidBooking_thenThrowNestedServletExceptionDueToValidationException() {
         BookingDtoFromUser notValidBookingDtoFromUser = new BookingDtoFromUser(1L, null, null, null);
 
 
@@ -168,7 +165,7 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
-    void getBookingDetails_returnBookingsWithDetails() {
+    void getBookingDetailsTest_returnBookingsWithDetails() {
         when(bookingService.getById(requesterId, 1L)).thenReturn(booking);
         when(bookingDtoMapper.toBookingDtoToUser(booking)).thenReturn(bookingDtoToUser);
 
@@ -188,7 +185,7 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
-    void getAllBookingsForUser_returnBookings() {
+    void getAllBookingsForUserTest_returnBookings() {
         int from = 0;
         int size = 1;
         when(bookingService.getBookingsForUser(requesterId, BookingState.ALL, from / size, size)).thenReturn(List.of(booking));
@@ -214,7 +211,7 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
-    void getAllBookingsForUserItems_returnBookings() {
+    void getAllBookingsForUserItemsTest_returnBookings() {
         int from = 0;
         int size = 1;
         when(bookingService.getAllBookingsForUserItems(owner.getId(), BookingState.ALL, from / size, size)).thenReturn(List.of(booking));

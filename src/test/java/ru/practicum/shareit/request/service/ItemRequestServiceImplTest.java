@@ -53,7 +53,7 @@ class ItemRequestServiceImplTest {
     private static final long requestId = 1;
 
     @Test
-    void add() {
+    void addTest_returnItemRequestToUserDto() {
         User user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         ItemRequest itemRequest = new ItemRequest(1L, "описание", user, LocalDateTime.now());
         ItemRequestFromUserDto itemRequestFromUserDto = new ItemRequestFromUserDto("описание");

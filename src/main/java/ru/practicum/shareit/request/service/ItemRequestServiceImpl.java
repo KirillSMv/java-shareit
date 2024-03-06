@@ -107,6 +107,5 @@ public class ItemRequestServiceImpl implements ItemRequestService {
                     requestItemsMap.getOrDefault(itemRequest.getId(), Collections.emptyList())));
         }
         return resultList;
-
     }
 }

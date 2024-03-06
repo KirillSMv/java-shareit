@@ -21,7 +21,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -57,7 +57,7 @@ class UserControllerTestIT {
 
     @Test
     @SneakyThrows
-    void add() {
+    void addTest_whenUserDtoIsValid_thenReturnUser() {
         when(userService.add((user))).thenReturn(user);
         when(userDtoMapper.toUser(userDto)).thenReturn(user);
         when(userDtoMapper.toDto(user)).thenReturn(userDto);
@@ -72,9 +72,29 @@ class UserControllerTestIT {
                 .andExpect(jsonPath("$.email", is(userDto.getEmail())));
     }
 
+    @Test
+    @SneakyThrows
+    void addTest_whenUserDtoNameIsBlank_thenStatusIsBadRequest() {
+        UserDto userDto = new UserDto(1L, "", "vladimir@yandex.ru");
+
+        when(userService.add((user))).thenReturn(user);
+        when(userDtoMapper.toUser(userDto)).thenReturn(user);
+        when(userDtoMapper.toDto(user)).thenReturn(userDto);
+
+        mvc.perform(post("/users")
+                        .content(mapper.writeValueAsString(userDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verify(userService, never()).add(user);
+    }
+
     @SneakyThrows
     @Test
-    void updateUser() {
+    void updateUserTest_whenUserDtoEmailIsIncorrect_thenStatusIsBadRequest() {
+        UserDto userDto = new UserDto(1L, "Vladimir", "vladimirrr");
+
         when(userService.updateUser(requesterId, user)).thenReturn(user);
         when(userDtoMapper.toUser(userDto)).thenReturn(user);
         when(userDtoMapper.toDto(user)).thenReturn(userDto);
@@ -83,15 +103,15 @@ class UserControllerTestIT {
                         .content(mapper.writeValueAsString(userDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
-                .andExpect(jsonPath("$.name", is(userDto.getName())))
-                .andExpect(jsonPath("$.email", is(userDto.getEmail())));
+                .andExpect(status().isBadRequest());
+
+        verify(userService, never()).add(user);
+
     }
 
     @Test
     @SneakyThrows
-    void getById() {
+    void getByIdTest_whenExists_thenReturnUser() {
         long userId = 1L;
         when(userService.getById(userId)).thenReturn(user);
         when(userDtoMapper.toDto(user)).thenReturn(userDto);
@@ -105,7 +125,7 @@ class UserControllerTestIT {
 
     @Test
     @SneakyThrows
-    void getAll() {
+    void getAllTest_whenUserExists_thenReturnListOfUser() {
         when(userService.getAll()).thenReturn(List.of(user, anotherUser));
         when(userDtoMapper.toDto(user)).thenReturn(userDto);
         when(userDtoMapper.toDto(anotherUser)).thenReturn(anotherUserDto);
@@ -123,7 +143,7 @@ class UserControllerTestIT {
 
     @Test
     @SneakyThrows
-    void deleteUserById() {
+    void deleteUserByIdTest_UserDeleted() {
         Mockito.doNothing().when(userService).deleteUserById(anyLong());
 
         mvc.perform(delete("/users/{userId}", requesterId))

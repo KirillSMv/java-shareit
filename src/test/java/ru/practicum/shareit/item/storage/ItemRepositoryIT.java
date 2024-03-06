@@ -60,7 +60,7 @@ class ItemRepositoryIT {
     }
 
     @Test
-    void findAllByOwner() {
+    void findAllByOwnerTest_whenItemExists_thenReturnItem() {
         int page = 0;
         int size = 1;
         List<Item> items = itemRepository.findAllByOwner(owner, PageRequest.of(page, size));
@@ -75,7 +75,7 @@ class ItemRepositoryIT {
     }
 
     @Test
-    void findAllContainingTextWithAvailableStatus() {
+    void findAllContainingTextWithAvailableStatusTest_whenItemExists_thenReturnListOfItem() {
         int page = 0;
         int size = 1;
         List<Item> items = itemRepository.findAllContainingTextWithAvailableStatus("имя", PageRequest.of(page, size));
@@ -90,7 +90,7 @@ class ItemRepositoryIT {
     }
 
     @Test
-    void findAllByRequest() {
+    void findAllByRequestTest_whenItemExists_thenReturnListOfItem() {
         List<Item> items = itemRepository.findAllByRequest(itemRequest);
 
         assertThat(items.size()).isEqualTo(1);
@@ -103,7 +103,7 @@ class ItemRepositoryIT {
     }
 
     @Test
-    void findAllByRequestIn() {
+    void findAllByRequestInTest_whenItemExists_thenReturnListOfItem() {
 
         List<Item> items = itemRepository.findAllByRequestIn(List.of(itemRequest));
 

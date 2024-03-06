@@ -25,7 +25,7 @@ class ItemDtoMapperTest {
     }
 
     @Test
-    void toItemTest() {
+    void toItemTest_returnItem() {
         ItemDtoFromOrToUser itemDtoFromOrToUser = new ItemDtoFromOrToUser(null, "имя", "описание", false, 1L);
         Item item = new Item(null, "имя", "описание", false, null, null);
 
@@ -35,7 +35,7 @@ class ItemDtoMapperTest {
     }
 
     @Test
-    void toDto_whenRequestIsNull() {
+    void toDtoTest_whenRequestIsNull_thenReturnItemDtoFromOrToUserWithNullRequest() {
         User user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         Item item = new Item(1L, "имя", "описание", false, user, null);
         ItemDtoFromOrToUser expectedItemDtoFromOrToUser = new ItemDtoFromOrToUser(1L, "имя", "описание", false, null);
@@ -46,7 +46,7 @@ class ItemDtoMapperTest {
     }
 
     @Test
-    void toDto() {
+    void toDtoTest_returnItemDtoFromOrToUser() {
         User user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         ItemRequest itemRequest = new ItemRequest(1L, "описание", user, LocalDateTime.now());
         Item item = new Item(1L, "имя", "описание", false, user, itemRequest);
@@ -58,7 +58,7 @@ class ItemDtoMapperTest {
     }
 
     @Test
-    void toItemDtoWithComments() {
+    void toItemDtoWithCommentsTest_returnItemDtoWithComments() {
         User user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         User owner = new User(2L, "Ilya", "ilya@yandex.ru");
         ItemRequest itemRequest = new ItemRequest(1L, "описание", user,

@@ -25,7 +25,7 @@ class ItemRequestMapperTest {
     }
 
     @Test
-    void toItemRequest() {
+    void toItemRequestTest_returnItemRequest() {
         ItemRequestFromUserDto itemRequestFromUserDto = new ItemRequestFromUserDto("описание");
 
         ItemRequest resultItemRequest = itemRequestMapper.toItemRequest(itemRequestFromUserDto);
@@ -34,7 +34,7 @@ class ItemRequestMapperTest {
     }
 
     @Test
-    void toItemRequestForUserDto() {
+    void toItemRequestForUserDtoTest_returnItemRequestForUserDto() {
         User user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         ItemRequest itemRequest = new ItemRequest(1L, "описание", user, LocalDateTime.now());
 
@@ -44,7 +44,7 @@ class ItemRequestMapperTest {
     }
 
     @Test
-    void toItemRequestInfoDto() {
+    void toItemRequestInfoDtoTest_returnItemRequestInfoDto() {
         User user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         User owner = new User(2L, "Ilya", "ilya@yandex.ru");
         ItemRequest itemRequest = new ItemRequest(1L, "описание", user, LocalDateTime.now());
@@ -58,7 +58,7 @@ class ItemRequestMapperTest {
     }
 
     @Test
-    void toItemRequestInfoDto_whenItemsListIsEmpty() {
+    void toItemRequestInfoDtoTest_whenItemsListIsEmpty_thenReturnItemRequestInfoDtoWithEmptyItemsList() {
         User user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         ItemRequest itemRequest = new ItemRequest(1L, "описание", user, LocalDateTime.now());
         List<Item> itemsList = Collections.emptyList();
@@ -71,7 +71,7 @@ class ItemRequestMapperTest {
 
 
     @Test
-    void toItemInfoDtoTest() {
+    void toItemInfoDtoTest_returnItemRequestInfoDto() {
         User owner = new User(2L, "Ilya", "ilya@yandex.ru");
         User user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         ItemRequest itemRequest = new ItemRequest(1L, "описание", user, LocalDateTime.now());

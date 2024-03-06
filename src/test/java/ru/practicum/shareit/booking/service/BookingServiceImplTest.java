@@ -35,13 +35,10 @@ class BookingServiceImplTest {
 
     @Mock
     private BookingRepository bookingRepository;
-
     @Mock
     private UserService userService;
-
     @InjectMocks
     private BookingServiceImpl bookingService;
-
     @Captor
     private ArgumentCaptor<Booking> bookingArgumentCaptor;
 

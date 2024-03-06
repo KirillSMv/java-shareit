@@ -28,7 +28,7 @@ class BookingDtoMapperTest {
     }
 
     @Test
-    void toBooking() {
+    void toBookingTest_returnBooking() {
         User user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         Item item = new Item(1L, "имя", "описание", false, user, null);
         Booking resultBooking = new Booking(null,
@@ -45,7 +45,7 @@ class BookingDtoMapperTest {
     }
 
     @Test
-    void toBookingDtoWithBookerIdTest_whenBookingNull() {
+    void toBookingDtoWithBookerIdTest_whenBookingNull_thenBookingDtoIsNull() {
         Booking booking = null;
         BookingDto bookingDto = bookingDtoMapper.toBookingDtoWithBookerId(booking);
 
@@ -53,7 +53,7 @@ class BookingDtoMapperTest {
     }
 
     @Test
-    void toBookingDtoWithBookerIdTest_whenBookingIsNotNull() {
+    void toBookingDtoWithBookerIdTest_whenBookingIsNotNull_thenReturnBookingDto() {
         User user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         User owner = new User(2L, "Ilya", "ilya@yandex.ru");
         Item item = new Item(1L, "имя", "описание", false, owner, null);
@@ -72,7 +72,7 @@ class BookingDtoMapperTest {
     }
 
     @Test
-    void toBookingDtoToUserTest() {
+    void toBookingDtoToUserTest_returnBookingDtoToUser() {
         User user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         User owner = new User(2L, "Ilya", "ilya@yandex.ru");
         Item item = new Item(1L, "имя", "описание", false, owner, null);
@@ -95,7 +95,7 @@ class BookingDtoMapperTest {
     }
 
     @Test
-    void toBookingDtoToUserListTest() {
+    void toBookingDtoToUserListTest_returnListOfBookingDtoToUser() {
         User user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         User owner = new User(2L, "Ilya", "ilya@yandex.ru");
         Item item = new Item(1L, "имя", "описание", false, owner, null);

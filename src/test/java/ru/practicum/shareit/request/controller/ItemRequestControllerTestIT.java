@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -59,7 +59,7 @@ class ItemRequestControllerTestIT {
     }
 
     @Test
-    void addTest() throws Exception {
+    void addTest_whenItemRequestFromUserDtoIsValid_thenReturnItem() throws Exception {
         ItemRequestFromUserDto itemRequestFromUserDto = new ItemRequestFromUserDto("описание");
 
         when(itemRequestService.add(itemRequestFromUserDto, requesterId)).thenReturn(itemRequestToUserDto);
@@ -76,7 +76,23 @@ class ItemRequestControllerTestIT {
     }
 
     @Test
-    void getByIdTest() throws Exception {
+    void addTest_whenDescriptionIsBlank_thenStatusIsBadRequest() throws Exception {
+        ItemRequestFromUserDto itemRequestFromUserDto = new ItemRequestFromUserDto("");
+
+        when(itemRequestService.add(itemRequestFromUserDto, requesterId)).thenReturn(itemRequestToUserDto);
+
+        mvc.perform(post("/requests")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-Sharer-User-Id", requesterId)
+                        .content(objectMapper.writeValueAsString(itemRequestFromUserDto)))
+                .andExpect(status().isBadRequest());
+
+        verify(itemRequestService, never()).add(itemRequestFromUserDto, requesterId);
+    }
+
+    @Test
+    void getByIdTest_whenItemExists_thenReturnItem() throws Exception {
         when(itemRequestService.getById(itemRequest.getId(), requesterId)).thenReturn(itemRequestInfoDto);
 
         mvc.perform(get("/requests/{requestId}", itemRequest.getId())
@@ -88,7 +104,7 @@ class ItemRequestControllerTestIT {
     }
 
     @Test
-    void getAllForUserTest() throws Exception {
+    void getAllForUserTest_whenItemExists_thenReturnListOfItem() throws Exception {
         when(itemRequestService.getAllForUser(requesterId)).thenReturn(List.of(itemRequestInfoDto));
 
         mvc.perform(get("/requests")
@@ -101,7 +117,7 @@ class ItemRequestControllerTestIT {
     }
 
     @Test
-    void testGetAllForUser() throws Exception {
+    void testGetAllForUserTest_whenItemExists_thenReturnListOfItem() throws Exception {
         int from = 0;
         int size = 1;
         when(itemRequestService.getAllFromOtherUsersPageable(owner.getId(), from / size, size)).thenReturn(List.of(itemRequestInfoDto));

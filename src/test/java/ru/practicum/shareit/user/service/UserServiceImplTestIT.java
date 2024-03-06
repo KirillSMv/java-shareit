@@ -43,19 +43,19 @@ class UserServiceImplTestIT {
         assertThat(savedUser.getEmail()).isEqualTo(user.getEmail());
     }
 
-/*   @Test //todo
+    @Test
     void getByIdTest_whenUserFound_thenReturnUser() {
         User expectedUser = new User();
         expectedUser.setName("Ilya");
         expectedUser.setEmail("ilya@yandex.ru");
         entityManager.persist(expectedUser);
 
-        User savedUser = userService.getById(1L);
+        User savedUser = userService.getById(expectedUser.getId());
 
         assertThat(savedUser.getId()).isNotNull();
         assertThat(savedUser.getName()).isEqualTo(expectedUser.getName());
         assertThat(savedUser.getEmail()).isEqualTo(expectedUser.getEmail());
-    }*/
+    }
 
     @Test
     void getByIdTest_whenUserNotFound_thenThrowObjectNotFoundException() {

@@ -24,7 +24,7 @@ class CommentDtoMapperTest {
     }
 
     @Test
-    void toCommentDto() {
+    void toCommentDtoTest_returnCommentDto() {
         User author = new User(1L, "Vladimir", "vladimir@yandex.ru");
         User owner = new User(2L, "Ilya", "ilya@yandex.ru");
         Item item = new Item(1L, "имя", "описание", false, owner, null);
@@ -39,7 +39,7 @@ class CommentDtoMapperTest {
     }
 
     @Test
-    void toCommentDtoList_whenCommentsListIfEmpty() {
+    void toCommentDtoListTest_whenCommentsListIsEmpty_thenReturnEmptyList() {
         List<Comment> commentsList = Collections.emptyList();
         List<CommentDto> resultCommentDtoList = commentDtoMapper.toCommentDtoList(commentsList);
 
@@ -47,7 +47,7 @@ class CommentDtoMapperTest {
     }
 
     @Test
-    void toCommentDtoListTest() {
+    void toCommentDtoListTest_whenCommentListIsNotEmpty_thenReturnListOfComments() {
         User author = new User(1L, "Vladimir", "vladimir@yandex.ru");
         User owner = new User(2L, "Ilya", "ilya@yandex.ru");
         Item item = new Item(1L, "имя", "описание", false, owner, null);

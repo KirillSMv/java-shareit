@@ -38,27 +38,20 @@ class BookingControllerTestIT {
 
     @MockBean
     private BookingService bookingService;
-
     @MockBean
     private UserService userService;
     @MockBean
     private ItemService itemService;
-
     @MockBean
     private BookingDtoMapper bookingDtoMapper;
-
     @Autowired
     private BookingController bookingController;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private MockMvc mvc;
 
     private final Long requesterId = 1L;
-
-
     private User user;
     private User owner;
     private Item item;
@@ -66,7 +59,6 @@ class BookingControllerTestIT {
     private BookingDtoToUser bookingDtoToUser;
     private ItemDtoToUser itemDtoToUser;
     private UserDtoWithIdOnly userDtoWithIdOnly;
-    private UserDtoWithIdOnly ownerUserDtoWithIdOnly;
     private Booking bookingForAdding;
     private BookingDtoFromUser bookingDtoFromUser;
 
@@ -75,7 +67,7 @@ class BookingControllerTestIT {
         user = new User(1L, "Vladimir", "vladimir@yandex.ru");
         owner = new User(2L, "Ilya", "ilya@yandex.ru");
         userDtoWithIdOnly = new UserDtoWithIdOnly(1L);
-        ownerUserDtoWithIdOnly = new UserDtoWithIdOnly(2L);
+        UserDtoWithIdOnly ownerUserDtoWithIdOnly = new UserDtoWithIdOnly(2L);
         item = new Item(1L, "имя", "описание", true, owner, null);
 
         booking = new Booking(1L, LocalDateTime.of(2025, 2, 20, 10, 10, 10),
@@ -105,9 +97,6 @@ class BookingControllerTestIT {
     void add() {
         Booking booking = new Booking(1L, bookingForAdding.getStart(), bookingForAdding.getEnd(),
                 bookingForAdding.getItem(), bookingForAdding.getBooker(), Status.WAITING);
-/*
-        BookingDtoToUser bookingDtoToUser = new BookingDtoToUser(1L, booking.getStart(),
-                booking.getEnd(), booking.getStatus(), itemDtoToUser, userDtoWithIdOnly);*/
 
         when(userService.getById(requesterId)).thenReturn(user);
         when(itemService.getById(item.getId())).thenReturn(item);
@@ -133,7 +122,7 @@ class BookingControllerTestIT {
 
     @SneakyThrows
     @Test
-    void addTest_whenNotValidBooking_thenBadRequest() {
+    void addTestTest_whenNotValidBooking_thenBadRequest() {
         BookingDtoFromUser notValidBookingDtoFromUser = new BookingDtoFromUser(1L, null, null, null);
         when(userService.getById(requesterId)).thenReturn(user);
         when(itemService.getById(item.getId())).thenReturn(item);
@@ -153,7 +142,7 @@ class BookingControllerTestIT {
 
     @SneakyThrows
     @Test
-    void processBookingTest() {
+    void processBookingTest_returnApprovedBooking() {
         bookingDtoToUser = new BookingDtoToUser(1L, booking.getStart(),
                 booking.getEnd(), Status.APPROVED, itemDtoToUser, userDtoWithIdOnly);
 
@@ -183,7 +172,7 @@ class BookingControllerTestIT {
 
     @SneakyThrows
     @Test
-    void getBookingDetails() {
+    void getBookingDetailsTest_returnBookingsWithDetails() {
         when(bookingService.getById(requesterId, 1L)).thenReturn(booking);
         when(bookingDtoMapper.toBookingDtoToUser(booking)).thenReturn(bookingDtoToUser);
 
@@ -203,7 +192,7 @@ class BookingControllerTestIT {
 
     @SneakyThrows
     @Test
-    void getAllBookingsForUser() {
+    void getAllBookingsForUserTest_returnBookings() {
         int from = 0;
         int size = 1;
         when(bookingService.getBookingsForUser(requesterId, BookingState.ALL, from / size, size)).thenReturn(List.of(booking));
@@ -229,7 +218,7 @@ class BookingControllerTestIT {
 
     @SneakyThrows
     @Test
-    void getAllBookingsForUserItems() {
+    void getAllBookingsForUserItemsTest_returnBookings() {
         int from = 0;
         int size = 1;
         when(bookingService.getAllBookingsForUserItems(owner.getId(), BookingState.ALL, from / size, size)).thenReturn(List.of(booking));

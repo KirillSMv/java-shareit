@@ -46,7 +46,6 @@ class ItemControllerTest {
     private CommentDtoMapper commentDtoMapper;
     @InjectMocks
     private ItemController itemController;
-
     private ObjectMapper objectMapper = new ObjectMapper();
     private MockMvc mvc;
 
@@ -74,11 +73,10 @@ class ItemControllerTest {
         BookingDto nextBookingDto = new BookingDto(1L, nextBooking.getStart(), nextBooking.getEnd(), item, 1L);
         expectedItemDtoWithComments = new ItemDtoWithComments(1L, "имя", "описание", true, lastBookingDto, nextBookingDto, List.of(commentDto));
         commentDtoFromUser = new CommentDtoFromUser("комментарий");
-
     }
 
     @Test
-    void addTest() throws Exception {
+    void addTestTest_whenItemDtoValid_thenReturnItem() throws Exception {
         when(itemService.add(requesterId, itemDtoFromOrToUser)).thenReturn(item);
         when(itemDtoMapper.toDto(item)).thenReturn(itemDtoFromOrToUser);
 
@@ -96,7 +94,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void updateItemTest() throws Exception {
+    void updateItemTest_whenItemDtoValid_thenReturnUpdatedItem() throws Exception {
         when(itemService.updateItem(requesterId, item.getId(), item)).thenReturn(item);
         when(itemDtoMapper.toItem(itemDtoFromOrToUser)).thenReturn(item);
         when(itemDtoMapper.toDto(item)).thenReturn(itemDtoFromOrToUser);
@@ -115,7 +113,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void getById() throws Exception {
+    void getByIdTest_whenItemExists_thenReturnItem() throws Exception {
         when(itemService.getWithBookingsById(requesterId, item.getId())).thenReturn(expectedItemDtoWithComments);
 
         mvc.perform(get("/items/{itemId}", item.getId())
@@ -138,7 +136,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void getAllForUser() throws Exception {
+    void getAllForUserTest_whenItemExists_thenReturnListOfItem() throws Exception {
         int from = 0;
         int size = 1;
         when(itemService.getAllForUserPageable(requesterId, from / size, size)).thenReturn(List.of(expectedItemDtoWithComments));
@@ -166,7 +164,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void search() throws Exception {
+    void searchTest_whenSearchForItemExists_thenReturnItem() throws Exception {
         int from = 1;
         int size = 1;
         String text = "описание";
@@ -188,7 +186,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void addComment() throws Exception {
+    void addCommentTest_whenCommentDtoValid_thenReturnComment() throws Exception {
         String text = "описание";
         when(itemService.addComment(anyLong(), anyLong(), any(Comment.class))).thenReturn(comment);
         when(commentDtoMapper.toCommentDto(comment)).thenReturn(commentDto);

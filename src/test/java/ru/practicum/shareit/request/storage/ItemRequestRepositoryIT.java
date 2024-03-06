@@ -37,7 +37,7 @@ class ItemRequestRepositoryIT {
     }
 
     @Test
-    void findAllByRequesterOrderByCreatedDescTest() {
+    void findAllByRequesterOrderByCreatedDescTest_whenItemRequestExist_thenReturnListOfItemRequest() {
         List<ItemRequest> itemRequests = itemRequestRepository.findAllByRequesterOrderByCreatedDesc(user);
 
         assertThat(itemRequests.size()).isEqualTo(1);
@@ -48,7 +48,7 @@ class ItemRequestRepositoryIT {
     }
 
     @Test
-    void findAllByRequesterNotOrderByCreatedDescTest() {
+    void findAllByRequesterNotOrderByCreatedDescTest_whenItemRequestExist_thenReturnListOfItemRequest() {
         int page = 0;
         int size = 1;
         User anotherUser = new User();
