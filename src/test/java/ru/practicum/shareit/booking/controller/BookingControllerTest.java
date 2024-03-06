@@ -105,7 +105,7 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
-    void add() {
+    void addTest_returnBookingDtoToUser() {
         Booking booking = new Booking(1L, bookingForAdding.getStart(), bookingForAdding.getEnd(),
                 bookingForAdding.getItem(), bookingForAdding.getBooker(), Status.WAITING);
 
@@ -151,7 +151,7 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
-    void processBookingTest() {
+    void processBookingTest_returnApprovedBooking() {
         bookingDtoToUser = new BookingDtoToUser(1L, booking.getStart(),
                 booking.getEnd(), Status.APPROVED, itemDtoToUser, userDtoWithIdOnly);
 
@@ -168,7 +168,7 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
-    void getBookingDetails() {
+    void getBookingDetails_returnBookingsWithDetails() {
         when(bookingService.getById(requesterId, 1L)).thenReturn(booking);
         when(bookingDtoMapper.toBookingDtoToUser(booking)).thenReturn(bookingDtoToUser);
 
@@ -188,7 +188,7 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
-    void getAllBookingsForUser() {
+    void getAllBookingsForUser_returnBookings() {
         int from = 0;
         int size = 1;
         when(bookingService.getBookingsForUser(requesterId, BookingState.ALL, from / size, size)).thenReturn(List.of(booking));
@@ -214,7 +214,7 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
-    void getAllBookingsForUserItems() {
+    void getAllBookingsForUserItems_returnBookings() {
         int from = 0;
         int size = 1;
         when(bookingService.getAllBookingsForUserItems(owner.getId(), BookingState.ALL, from / size, size)).thenReturn(List.of(booking));
@@ -238,3 +238,5 @@ class BookingControllerTest {
                 .andExpect(jsonPath("$[0].booker.id", is(booking.getBooker().getId()), Long.class));
     }
 }
+
+
