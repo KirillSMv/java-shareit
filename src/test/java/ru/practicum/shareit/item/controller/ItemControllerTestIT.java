@@ -23,6 +23,7 @@ import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -136,7 +137,7 @@ class ItemControllerTestIT {
                 .andExpect(jsonPath("$.nextBooking.bookerId", is(expectedItemDtoWithComments.getNextBooking().getBookerId()), Long.class))
                 .andExpect(jsonPath("$.comments[0].text", is(expectedItemDtoWithComments.getComments().get(0).getText())))
                 .andExpect(jsonPath("$.comments[0].authorName", is(expectedItemDtoWithComments.getComments().get(0).getAuthorName())))
-                .andExpect(jsonPath("$.comments[0].created", is(expectedItemDtoWithComments.getComments().get(0).getCreated().toString())));
+                .andExpect(jsonPath("$.comments[0].created", is(expectedItemDtoWithComments.getComments().get(0).getCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")))));
     }
 
     @Test
@@ -164,7 +165,7 @@ class ItemControllerTestIT {
                 .andExpect(jsonPath("$[0].nextBooking.bookerId", is(expectedItemDtoWithComments.getNextBooking().getBookerId()), Long.class))
                 .andExpect(jsonPath("$[0].comments[0].text", is(expectedItemDtoWithComments.getComments().get(0).getText())))
                 .andExpect(jsonPath("$[0].comments[0].authorName", is(expectedItemDtoWithComments.getComments().get(0).getAuthorName())))
-                .andExpect(jsonPath("$[0].comments[0].created", is(expectedItemDtoWithComments.getComments().get(0).getCreated().toString())));
+                .andExpect(jsonPath("$[0].comments[0].created", is(expectedItemDtoWithComments.getComments().get(0).getCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")))));
     }
 
     @Test
@@ -204,7 +205,7 @@ class ItemControllerTestIT {
                 .andExpect(jsonPath("$.id", is(commentDto.getId()), Long.class))
                 .andExpect(jsonPath("$.text", is(commentDto.getText())))
                 .andExpect(jsonPath("$.authorName", is(commentDto.getAuthorName())))
-                .andExpect(jsonPath("$.created", is(commentDto.getCreated().toString())));
+                .andExpect(jsonPath("$.created", is(commentDto.getCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")))));
 
     }
 }
