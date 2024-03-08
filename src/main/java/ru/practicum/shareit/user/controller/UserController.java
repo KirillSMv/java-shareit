@@ -51,6 +51,6 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public String deleteUserById(@PathVariable("userId") @Positive(message = "id не может быть меньше 1") long id) {
         userService.deleteUserById(id);
-        return String.format("User with id 1 deleted", id);
+        return String.format("User with id %d deleted", id);
     }
 }

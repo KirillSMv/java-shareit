@@ -34,10 +34,8 @@ class UserControllerTestIT {
     private UserService userService;
     @MockBean
     private UserDtoMapper userDtoMapper;
-
     @Autowired
     private ObjectMapper mapper;
-
     @Autowired
     private MockMvc mvc;
 

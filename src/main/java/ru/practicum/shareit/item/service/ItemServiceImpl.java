@@ -37,9 +37,6 @@ public class ItemServiceImpl implements ItemService {
     private final BookingService bookingService;
     private final CommentRepository commentRepository;
     private final ItemRequestRepository itemRequestRepository;
-    //здесь добавляется очередная зависимость на репозиторий, но вот прямо не знаю, как без них обойтись
-    //доменный объект в себе содержит зависимости и плюс DTO для пользователя требуют дополнительные сущности
-    //переносить создание DTO в контроллер и добавлять там нужные зависимости кажется совсем плохой идеей)
 
     private final ItemDtoMapper itemDtoMapper;
     private final CommentDtoMapper commentDtoMapper;
@@ -154,24 +151,6 @@ public class ItemServiceImpl implements ItemService {
                         bookingDtoMapper.toBookingDtoWithBookerId(nextBookings.getOrDefault(item.getId(), null))))
                 .sorted(Comparator.comparingLong(ItemDtoWithComments::getId))
                 .collect(Collectors.toList());
-
-       /* Map<Long, Booking> lastBookingsListsMap = new HashMap<>();
-        for (Booking booking : bookingService.findAllLastBookingsForItems(items, page, size)) {
-            lastBookingsListsMap.put(booking.getItem().getId(), booking);
-        }
-
-        Map<Long, Booking> nextBookingsListMap = new HashMap<>();
-        for (Booking booking : bookingService.findAllNextBookingsForItems(items, page, size)) {
-            nextBookingsListMap.put(booking.getItem().getId(), booking);
-        }
-
-        return items.stream()
-                .map(item -> itemDtoMapper.toItemDtoWithComments(item,
-                        commentDtoMapper.toCommentDtoList(commentsMap.getOrDefault(item.getId(), Collections.emptyList())),
-                        bookingDtoMapper.toBookingDtoWithBookerId(lastBookingsListsMap.getOrDefault(item.getId(), null)),
-                        bookingDtoMapper.toBookingDtoWithBookerId(nextBookingsListMap.getOrDefault(item.getId(), null))))
-                .sorted(Comparator.comparingLong(ItemDtoWithComments::getId))
-                .collect(Collectors.toList()); */
     }
 
     @Transactional

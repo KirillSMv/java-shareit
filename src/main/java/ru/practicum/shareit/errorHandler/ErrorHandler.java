@@ -38,8 +38,9 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handle(final IllegalArgumentException e) {
-        String stackTrace = getStackTraceAsString(e);
-        log.error("Произошла ошибка: {}", stackTrace);
+        //String stackTrace = getStackTraceAsString(e);
+        //log.error("Произошла ошибка: {}", stackTrace);
+        log.error("Произошла ошибка:", e);
         return new ErrorResponse(e.getMessage(), "проверьте переданные параметры");
     }
 
@@ -88,8 +89,9 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handle(final Throwable e) {
-        String stackTrace = getStackTraceAsString(e);
-        log.error("Произошла ошибка: {}", stackTrace);
+/*        String stackTrace = getStackTraceAsString(e);
+        log.error("Произошла ошибка: {}", stackTrace);*/
+        log.error("Произошла ошибка:", e);
         return new ErrorResponse("Произошла ошибка: ", e.getMessage());
     }
 

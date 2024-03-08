@@ -23,10 +23,11 @@ public class ItemRequestMapper {
     }
 
     public ItemRequestInfoDto toItemRequestInfoDto(ItemRequest itemRequest, List<Item> items) {
-        ItemRequestInfoDto itemRequestInfoDto = new ItemRequestInfoDto();
-        itemRequestInfoDto.setId(itemRequest.getId());
-        itemRequestInfoDto.setDescription(itemRequest.getDescription());
-        itemRequestInfoDto.setCreated(itemRequest.getCreated());
+        ItemRequestInfoDto itemRequestInfoDto = ItemRequestInfoDto.builder()
+                .id(itemRequest.getId())
+                .description(itemRequest.getDescription())
+                .created(itemRequest.getCreated())
+                .build();
 
         List<ItemRequestInfoDto.ItemInfoDto> itemInfoDtos = new ArrayList<>();
         if (!items.isEmpty()) {
@@ -34,8 +35,9 @@ public class ItemRequestMapper {
                 itemInfoDtos.add(toItemInfoDto(item));
             }
         }
-        itemRequestInfoDto.setItems(itemInfoDtos);
-        return itemRequestInfoDto;
+        return itemRequestInfoDto.toBuilder()
+                .items(itemInfoDtos)
+                .build();
     }
 
     public ItemRequestInfoDto.ItemInfoDto toItemInfoDto(Item item) {

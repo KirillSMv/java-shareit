@@ -83,10 +83,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                                                                             LocalDateTime currentTime,
                                                                             Pageable pageable);*/
 
-
-    //здесь переделал реализацию на 1 запрос вместо двух. Правда не уверен насчет его эффективности)
-    //из-за UNION не получается сортировать по каждому запросу и пришлось обернуть их во вложенные запросы
-    //есть подозрения, что можно как-то сделать проще)"
     @Query(value = "SELECT * FROM " +
             "((SELECT DISTINCT ON (item_id) " +
             "bk.id, bk.item_id, bk.start_time, bk.end_time, bk.user_id, bk.status " +
