@@ -1,46 +1,48 @@
 package ru.practicum.shareit.item.dto.mapper;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.item.dto.CommentDto;
-import ru.practicum.shareit.item.dto.ItemDtoFromUser;
+import ru.practicum.shareit.item.dto.ItemDtoFromOrToUser;
 import ru.practicum.shareit.item.dto.ItemDtoWithComments;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public class ItemDtoMapper {
-    public static Item toItem(ItemDtoFromUser itemDtoFromUser) {
+    public Item toItem(ItemDtoFromOrToUser itemDtoFromOrToUser) {
         Item item = new Item();
-        item.setId(itemDtoFromUser.getId());
-        item.setName(itemDtoFromUser.getName());
-        item.setDescription(itemDtoFromUser.getDescription());
-        item.setAvailable(itemDtoFromUser.getAvailable());
+        item.setId(itemDtoFromOrToUser.getId());
+        item.setName(itemDtoFromOrToUser.getName());
+        item.setDescription(itemDtoFromOrToUser.getDescription());
+        item.setAvailable(itemDtoFromOrToUser.getAvailable());
         return item;
     }
 
-    public static ItemDtoFromUser toDto(Item item) {
-        ItemDtoFromUser itemDtoFromUser = new ItemDtoFromUser();
-        itemDtoFromUser.setId(item.getId());
-        itemDtoFromUser.setName(item.getName());
-        itemDtoFromUser.setDescription(item.getDescription());
-        itemDtoFromUser.setAvailable(item.getAvailable());
-        return itemDtoFromUser;
+    public ItemDtoFromOrToUser toDto(Item item) {
+        ItemDtoFromOrToUser itemDtoFromOrToUser = new ItemDtoFromOrToUser();
+        itemDtoFromOrToUser.setId(item.getId());
+        itemDtoFromOrToUser.setName(item.getName());
+        itemDtoFromOrToUser.setDescription(item.getDescription());
+        itemDtoFromOrToUser.setAvailable(item.getAvailable());
+        if (item.getRequest() != null) {
+            itemDtoFromOrToUser.setRequestId(item.getRequest().getId());
+        }
+        return itemDtoFromOrToUser;
     }
 
-    public static ItemDtoWithComments toItemDtoWithComments(Item item,
-                                                            List<CommentDto> comments,
-                                                            BookingDto lastBooking,
-                                                            BookingDto nextBooking) {
+    public ItemDtoWithComments toItemDtoWithComments(Item item,
+                                                     List<CommentDto> comments,
+                                                     BookingDto lastBookingDto,
+                                                     BookingDto nextBookingDto) {
         ItemDtoWithComments itemDtoWithComments = new ItemDtoWithComments();
         itemDtoWithComments.setId(item.getId());
         itemDtoWithComments.setName(item.getName());
         itemDtoWithComments.setDescription(item.getDescription());
         itemDtoWithComments.setAvailable(item.getAvailable());
-        itemDtoWithComments.setLastBooking(lastBooking);
-        itemDtoWithComments.setNextBooking(nextBooking);
+        itemDtoWithComments.setLastBooking(lastBookingDto);
+        itemDtoWithComments.setNextBooking(nextBookingDto);
         itemDtoWithComments.setComments(comments);
         return itemDtoWithComments;
     }

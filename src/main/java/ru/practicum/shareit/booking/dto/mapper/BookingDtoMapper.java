@@ -1,7 +1,9 @@
-package ru.practicum.shareit.booking.dto;
+package ru.practicum.shareit.booking.dto.mapper;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingDtoFromUser;
+import ru.practicum.shareit.booking.dto.BookingDtoToUser;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.dto.ItemDtoToUser;
 import ru.practicum.shareit.item.model.Item;
@@ -11,10 +13,10 @@ import ru.practicum.shareit.user.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public class BookingDtoMapper {
 
-    public static Booking toBooking(BookingDtoFromUser bookingDtoFromUser, User user, Item item) {
+    public Booking toBooking(BookingDtoFromUser bookingDtoFromUser, User user, Item item) {
         Booking booking = new Booking();
         booking.setStart(bookingDtoFromUser.getStart());
         booking.setEnd(bookingDtoFromUser.getEnd());
@@ -23,7 +25,7 @@ public class BookingDtoMapper {
         return booking;
     }
 
-    public static BookingDto toBookingDtoWithBookerId(Booking booking) {
+    public BookingDto toBookingDtoWithBookerId(Booking booking) {
         if (booking == null) {
             return null;
         }
@@ -36,7 +38,7 @@ public class BookingDtoMapper {
         return bookingDto;
     }
 
-    public static BookingDtoToUser toBookingDtoToUser(Booking booking) {
+    public BookingDtoToUser toBookingDtoToUser(Booking booking) {
         BookingDtoToUser bookingDtoToUser = new BookingDtoToUser();
         bookingDtoToUser.setId(booking.getId());
         bookingDtoToUser.setStart(booking.getStart());
@@ -64,7 +66,7 @@ public class BookingDtoMapper {
         return bookingDtoToUser;
     }
 
-    public static List<BookingDtoToUser> toBookingDtoToUserList(List<Booking> bookings) {
+    public List<BookingDtoToUser> toBookingDtoToUserList(List<Booking> bookings) {
         List<BookingDtoToUser> bookingDtoToUserList = new ArrayList<>();
         for (Booking booking : bookings) {
             bookingDtoToUserList.add(toBookingDtoToUser(booking));

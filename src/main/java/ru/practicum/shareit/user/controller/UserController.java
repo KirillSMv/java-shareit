@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.dto.UserDtoMapper;
+import ru.practicum.shareit.user.dto.mapper.UserDtoMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.validationGroups.OnCreate;
@@ -21,35 +21,36 @@ import java.util.stream.Collectors;
 @Validated
 public class UserController {
     private final UserService userService;
+    private final UserDtoMapper userDtoMapper;
 
     @Validated(OnCreate.class)
     @PostMapping
     public UserDto add(@Valid @RequestBody UserDto userDto) {
-        User user = userService.add(UserDtoMapper.toUser(userDto));
-        return UserDtoMapper.toDto(user);
+        User user = userService.add(userDtoMapper.toUser(userDto));
+        return userDtoMapper.toDto(user);
     }
 
     @Validated(OnUpdate.class)
     @PatchMapping("/{userId}")
     public UserDto updateUser(@PathVariable("userId") @Positive(message = "id не может быть меньше 1") long id,
                               @Valid @RequestBody UserDto userDto) {
-        User user = userService.updateUser(id, UserDtoMapper.toUser(userDto));
-        return UserDtoMapper.toDto(user);
+        User user = userService.updateUser(id, userDtoMapper.toUser(userDto));
+        return userDtoMapper.toDto(user);
     }
 
     @GetMapping("/{userId}")
     public UserDto getById(@PathVariable("userId") @Positive(message = "id не может быть меньше 1") long id) {
-        return UserDtoMapper.toDto(userService.getById(id));
+        return userDtoMapper.toDto(userService.getById(id));
     }
 
     @GetMapping
     public List<UserDto> getAll() {
-        return userService.getAll().stream().map(UserDtoMapper::toDto).collect(Collectors.toList());
+        return userService.getAll().stream().map(userDtoMapper::toDto).collect(Collectors.toList());
     }
 
     @DeleteMapping("/{userId}")
     public String deleteUserById(@PathVariable("userId") @Positive(message = "id не может быть меньше 1") long id) {
         userService.deleteUserById(id);
-        return String.format("Пользователь с id %d удален", id);
+        return String.format("User with id %d deleted", id);
     }
 }
