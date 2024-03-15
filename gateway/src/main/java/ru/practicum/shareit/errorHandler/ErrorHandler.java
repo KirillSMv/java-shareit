@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
-import java.sql.SQLException;
 
 @Slf4j
 @RestControllerAdvice

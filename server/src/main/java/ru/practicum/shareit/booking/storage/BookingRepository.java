@@ -27,7 +27,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findAllByBookerAndStatus(User booker, Status status, Pageable pageable);
 
-    List<Booking>   findAllByBookerAndEndBeforeOrderByStartDesc(User booker, LocalDateTime currentTime, Pageable pageable);
+    List<Booking> findAllByBookerAndEndBeforeOrderByStartDesc(User booker, LocalDateTime currentTime, Pageable pageable);
 
     List<Booking> findAllByBookerAndStartBeforeAndEndAfterOrderByStartDesc(User booker, LocalDateTime currentTime,
                                                                            LocalDateTime currentTimeSecondParameter,

@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.request.dto.ItemRequestFromUserDto;
 import ru.practicum.shareit.request.client.ItemRequestClient;
+import ru.practicum.shareit.request.dto.ItemRequestFromUserDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
