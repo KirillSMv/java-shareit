@@ -16,10 +16,6 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
@@ -36,7 +32,7 @@ public class BookingController {
 
     @PostMapping
     public BookingDtoToUser add(@RequestBody @Valid BookingDtoFromUser bookingDtoFromUser,
-                                @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId) {
+                                @RequestHeader("X-Sharer-User-Id") long userId) {
         User user = userService.getById(userId);
         Item item = itemService.getById(bookingDtoFromUser.getItemId());
         Booking booking = bookingService.add(bookingDtoMapper.toBooking(bookingDtoFromUser, user, item));
@@ -44,16 +40,16 @@ public class BookingController {
     }
 
     @PatchMapping(value = "/{bookingId}", params = "approved")
-    public BookingDtoToUser processBooking(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
-                                           @PathVariable("bookingId") @Positive(message = "id не может быть меньше 1") long bookingId,
+    public BookingDtoToUser processBooking(@RequestHeader("X-Sharer-User-Id") long userId,
+                                           @PathVariable("bookingId") long bookingId,
                                            @RequestParam("approved") boolean approved) {
         Booking booking = bookingService.processBooking(userId, bookingId, approved);
         return bookingDtoMapper.toBookingDtoToUser(booking);
     }
 
     @GetMapping("/{bookingId}")
-    public BookingDtoToUser getBookingDetails(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
-                                              @PathVariable("bookingId") @Positive(message = "id не может быть меньше 1") long bookingId) {
+    public BookingDtoToUser getBookingDetails(@RequestHeader("X-Sharer-User-Id") long userId,
+                                              @PathVariable("bookingId") long bookingId) {
 
         Booking booking = bookingService.getById(userId, bookingId);
         return bookingDtoMapper.toBookingDtoToUser(booking);
@@ -61,20 +57,20 @@ public class BookingController {
 
 
     @GetMapping
-    public List<BookingDtoToUser> getAllBookingsForUser(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
-                                                        @RequestParam(name = "state", defaultValue = "ALL") @NotBlank String stateParam,
-                                                        @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
-                                                        @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(100) Integer size) {
+    public List<BookingDtoToUser> getAllBookingsForUser(@RequestHeader("X-Sharer-User-Id") long userId,
+                                                        @RequestParam(name = "state", defaultValue = "ALL") String stateParam,
+                                                        @RequestParam(value = "from", defaultValue = "0") Integer from,
+                                                        @RequestParam(value = "size", defaultValue = "20") Integer size) {
         BookingState bookingState = BookingState.convert(stateParam.toUpperCase()).orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
         List<Booking> bookings = bookingService.getBookingsForUser(userId, bookingState, from / size, size);
         return bookingDtoMapper.toBookingDtoToUserList(bookings);
     }
 
     @GetMapping("/owner")
-    public List<BookingDtoToUser> getAllBookingsForUserItems(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть меньше 1") long userId,
-                                                             @RequestParam(name = "state", defaultValue = "ALL") @NotBlank String stateParam,
-                                                             @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
-                                                             @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(100) Integer size) {
+    public List<BookingDtoToUser> getAllBookingsForUserItems(@RequestHeader("X-Sharer-User-Id") long userId,
+                                                             @RequestParam(name = "state", defaultValue = "ALL") String stateParam,
+                                                             @RequestParam(value = "from", defaultValue = "0") Integer from,
+                                                             @RequestParam(value = "size", defaultValue = "20") Integer size) {
         BookingState bookingState = BookingState.convert(stateParam.toUpperCase()).orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
         List<Booking> bookings = bookingService.getAllBookingsForUserItems(userId, bookingState, from / size, size);
         return bookingDtoMapper.toBookingDtoToUserList(bookings);

@@ -27,7 +27,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findAllByBookerAndStatus(User booker, Status status, Pageable pageable);
 
-    List<Booking> findAllByBookerAndEndBeforeOrderByStartDesc(User booker, LocalDateTime currentTime, Pageable pageable);
+    List<Booking>   findAllByBookerAndEndBeforeOrderByStartDesc(User booker, LocalDateTime currentTime, Pageable pageable);
 
     List<Booking> findAllByBookerAndStartBeforeAndEndAfterOrderByStartDesc(User booker, LocalDateTime currentTime,
                                                                            LocalDateTime currentTimeSecondParameter,
@@ -83,22 +83,24 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                                                                             LocalDateTime currentTime,
                                                                             Pageable pageable);*/
 
-    @Query(value = "SELECT * FROM " +
-            "((SELECT DISTINCT ON (item_id) " +
+    @Query(value = "SELECT * " +
+            "FROM (" +
+            "(SELECT DISTINCT ON (bk.item_id) " +
             "bk.id, bk.item_id, bk.start_time, bk.end_time, bk.user_id, bk.status " +
             "FROM bookings as bk " +
             "WHERE bk.item_id IN (?1) " +
             "AND bk.status NOT IN ('CANCELLED', 'REJECTED') " +
             "AND bk.start_time < ?2 " +
-            "ORDER BY bk.item_id, bk.start_time DESC) " +
+            "ORDER BY bk.item_id, bk.start_time DESC)" +
             "UNION " +
-            "(SELECT DISTINCT ON (item_id) " +
+            "(SELECT DISTINCT ON (bk.item_id) " +
             "bk.id, bk.item_id, bk.start_time, bk.end_time, bk.user_id, bk.status " +
             "FROM bookings as bk " +
             "WHERE bk.item_id IN (?1) " +
             "AND bk.status NOT IN ('CANCELLED', 'REJECTED') " +
             "AND bk.start_time > ?2 " +
-            "ORDER BY bk.item_id, bk.start_time ASC))", nativeQuery = true)
+            "ORDER BY bk.item_id, bk.start_time ASC)" +
+            ") AS overall", nativeQuery = true)
     List<Booking> findAllUnion(List<Item> items,
                                LocalDateTime currentTime,
                                Pageable pageable);

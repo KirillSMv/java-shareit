@@ -10,8 +10,6 @@ import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.validationGroups.OnCreate;
 import ru.practicum.shareit.validationGroups.OnUpdate;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,21 +23,21 @@ public class UserController {
 
     @Validated(OnCreate.class)
     @PostMapping
-    public UserDto add(@Valid @RequestBody UserDto userDto) {
+    public UserDto add(@RequestBody UserDto userDto) {
         User user = userService.add(userDtoMapper.toUser(userDto));
         return userDtoMapper.toDto(user);
     }
 
     @Validated(OnUpdate.class)
     @PatchMapping("/{userId}")
-    public UserDto updateUser(@PathVariable("userId") @Positive(message = "id не может быть меньше 1") long id,
-                              @Valid @RequestBody UserDto userDto) {
+    public UserDto updateUser(@PathVariable("userId") long id,
+                              @RequestBody UserDto userDto) {
         User user = userService.updateUser(id, userDtoMapper.toUser(userDto));
         return userDtoMapper.toDto(user);
     }
 
     @GetMapping("/{userId}")
-    public UserDto getById(@PathVariable("userId") @Positive(message = "id не может быть меньше 1") long id) {
+    public UserDto getById(@PathVariable("userId") long id) {
         return userDtoMapper.toDto(userService.getById(id));
     }
 
@@ -49,8 +47,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public String deleteUserById(@PathVariable("userId") @Positive(message = "id не может быть меньше 1") long id) {
+    public void deleteUserById(@PathVariable("userId") long id) {
         userService.deleteUserById(id);
-        return String.format("User with id %d deleted", id);
     }
 }

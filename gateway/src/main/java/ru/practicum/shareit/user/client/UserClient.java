@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +8,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.client.BaseClient;
+import ru.practicum.shareit.user.dto.UserDto;
 
 @Service
 public class UserClient extends BaseClient {
@@ -22,7 +23,6 @@ public class UserClient extends BaseClient {
                         .build()
         );
     }
-    //настроили клиента на работу с url http:localhost:8080/users
 
     public ResponseEntity<Object> getUsers() {
         return get("");
@@ -43,6 +43,4 @@ public class UserClient extends BaseClient {
     public ResponseEntity<Object> deleteUser(long userId) {
         return delete("/" + userId);
     }
-
-
 }

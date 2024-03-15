@@ -1,10 +1,13 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.client.UserClient;
 import ru.practicum.shareit.validationGroups.OnCreate;
 import ru.practicum.shareit.validationGroups.OnUpdate;
 
@@ -47,9 +50,9 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Object> deleteUserById(@PathVariable("userId") @Positive(message = "id не может быть меньше 1") long id) {
+    public HttpStatus deleteUserById(@PathVariable("userId") @Positive(message = "id не может быть меньше 1") long id) {
         log.info("deleteUserById userId = {}", id);
-        return userClient.deleteUser(id);
+        return userClient.deleteUser(id).getStatusCode();
     }
 }
 
