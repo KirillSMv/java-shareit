@@ -18,7 +18,6 @@ import java.util.List;
 
 @Transactional
 @SpringBootTest(
-        properties = {"spring.sql.init.schema-locations=classpath:schema_test.sql"},
         webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class BookingServiceImplTestIT {

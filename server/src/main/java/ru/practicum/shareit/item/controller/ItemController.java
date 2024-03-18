@@ -12,8 +12,6 @@ import ru.practicum.shareit.item.dto.mapper.ItemDtoMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.validationGroups.OnCreate;
-import ru.practicum.shareit.validationGroups.OnUpdate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +25,6 @@ public class ItemController {
     private final ItemDtoMapper itemDtoMapper;
     private final CommentDtoMapper commentDtoMapper;
 
-    @Validated(OnCreate.class)
     @PostMapping
     public ItemDtoFromOrToUser add(
             @RequestHeader("X-Sharer-User-Id") long userId,
@@ -36,7 +33,6 @@ public class ItemController {
         return itemDtoMapper.toDto(item);
     }
 
-    @Validated(OnUpdate.class)
     @PatchMapping("/{itemId}")
     public ItemDtoFromOrToUser updateItem(
             @RequestHeader("X-Sharer-User-Id") long userId,

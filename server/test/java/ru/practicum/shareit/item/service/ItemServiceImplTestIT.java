@@ -15,7 +15,6 @@ import javax.persistence.TypedQuery;
 
 @Transactional
 @SpringBootTest(
-        properties = {"spring.sql.init.schema-locations=classpath:schema_test.sql"},
         webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class ItemServiceImplTestIT {

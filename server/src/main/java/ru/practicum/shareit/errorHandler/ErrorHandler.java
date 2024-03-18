@@ -11,8 +11,6 @@ import ru.practicum.shareit.exceptions.BookingCannotBeProcessedException;
 import ru.practicum.shareit.exceptions.ObjectAlreadyExistsException;
 import ru.practicum.shareit.exceptions.ObjectNotFoundException;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
@@ -46,21 +44,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handle(final ConstraintViolationException e) {
-        log.error("Ошибка валидации: {}, {}", e.getCause(), e.getMessage());
-        return new ErrorResponse("Ошибка валидации", e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handle(final MethodArgumentNotValidException e) {
-        log.error("Ошибка валидации: {}", e.getMessage());
-        return new ErrorResponse("Ошибка валидации", e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handle(final ValidationException e) {
         log.error("Ошибка валидации: {}", e.getMessage());
         return new ErrorResponse("Ошибка валидации", e.getMessage());
     }

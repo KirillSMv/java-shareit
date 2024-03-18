@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest(properties = {"db.name=shareItTest", "spring.sql.init.schema-locations=classpath:schema_test.sql"})
+@DataJpaTest
 class ItemRequestRepositoryIT {
 
     @Autowired

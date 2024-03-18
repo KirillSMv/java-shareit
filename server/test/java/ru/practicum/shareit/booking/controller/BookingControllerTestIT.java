@@ -122,26 +122,6 @@ class BookingControllerTestIT {
 
     @SneakyThrows
     @Test
-    void addTestTest_whenNotValidBooking_thenBadRequest() {
-        BookingDtoFromUser notValidBookingDtoFromUser = new BookingDtoFromUser(1L, null, null, null);
-        when(userService.getById(requesterId)).thenReturn(user);
-        when(itemService.getById(item.getId())).thenReturn(item);
-        when(bookingService.add(booking)).thenReturn(booking);
-        when(bookingDtoMapper.toBooking(notValidBookingDtoFromUser, user, item)).thenReturn(booking);
-        when(bookingDtoMapper.toBookingDtoToUser(booking)).thenReturn(bookingDtoToUser);
-
-        mvc.perform(post("/bookings")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(notValidBookingDtoFromUser))
-                        .header("X-Sharer-User-Id", requesterId)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-
-        verify(bookingService, never()).add(booking);
-    }
-
-    @SneakyThrows
-    @Test
     void processBookingTest_returnApprovedBooking() {
         bookingDtoToUser = new BookingDtoToUser(1L, booking.getStart(),
                 booking.getEnd(), Status.APPROVED, itemDtoToUser, userDtoWithIdOnly);

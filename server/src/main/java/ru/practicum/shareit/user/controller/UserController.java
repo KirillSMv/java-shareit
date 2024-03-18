@@ -7,8 +7,6 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.mapper.UserDtoMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
-import ru.practicum.shareit.validationGroups.OnCreate;
-import ru.practicum.shareit.validationGroups.OnUpdate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,14 +19,12 @@ public class UserController {
     private final UserService userService;
     private final UserDtoMapper userDtoMapper;
 
-    @Validated(OnCreate.class)
     @PostMapping
     public UserDto add(@RequestBody UserDto userDto) {
         User user = userService.add(userDtoMapper.toUser(userDto));
         return userDtoMapper.toDto(user);
     }
 
-    @Validated(OnUpdate.class)
     @PatchMapping("/{userId}")
     public UserDto updateUser(@PathVariable("userId") long id,
                               @RequestBody UserDto userDto) {
